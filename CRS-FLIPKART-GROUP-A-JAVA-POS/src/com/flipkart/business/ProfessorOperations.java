@@ -1,8 +1,8 @@
 package com.flipkart.business;
 
-public class ProfessorBusiness {
+public class ProfessorOperations {
 
-	public ProfessorBusiness() {
+	public ProfessorOperations() {
 		// TODO Auto-generated constructor stub
 	}
 	void addGrade(Integer studentID, Integer semesterID,String courseID, String alphaGrade) {

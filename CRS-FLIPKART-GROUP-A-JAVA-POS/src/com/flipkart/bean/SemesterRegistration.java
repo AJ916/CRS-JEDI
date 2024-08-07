@@ -1,8 +1,8 @@
 package com.flipkart.bean;
 
-public class StudentSemRegistration {
+public class SemesterRegistration {
 
-	public StudentSemRegistration() {
+	public SemesterRegistration() {
 		// TODO Auto-generated constructor stub
 		super();
 	}
@@ -34,7 +34,7 @@ public class StudentSemRegistration {
 	public void setSemesterID(Integer semesterID) {
 		this.semesterID = semesterID;
 	}
-	public StudentSemRegistration(Integer studentID, String dateOfRegistration, Boolean isApproved,
+	public SemesterRegistration(Integer studentID, String dateOfRegistration, Boolean isApproved,
 			Integer semesterID) {
 		super();
 		this.studentID = studentID;

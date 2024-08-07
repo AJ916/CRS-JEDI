@@ -1,24 +1,34 @@
 package com.flipkart.bean;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
-public class GradeCard extends RegisteredCourses {
+public class GradeCard {
 
 	public GradeCard() {
 		// TODO Auto-generated constructor stub
 		super();
 	}
-	
+
+	HashMap<String, String> grades = new HashMap<String, String>();
 	private Integer studentID;
 	private Integer semester;
 	private Float cgpa;
-	
-	public GradeCard(Integer studentID, Integer semesterID, ArrayList<String> courseID, Integer studentID2,
-			Integer semester, Float cgpa) {
-		super(studentID, semesterID, courseID);
-		studentID = studentID2;
+
+
+	public GradeCard(HashMap<String, String> grades, Integer studentID, Integer semester, Float cgpa) {
+		super();
+		this.grades = grades;
+		this.studentID = studentID;
 		this.semester = semester;
 		this.cgpa = cgpa;
+	}
+
+	public HashMap<String, String> getGrades() {
+		return grades;
+	}
+
+	public void setGrades(HashMap<String, String> grades) {
+		this.grades = grades;
 	}
 
 	public Integer getStudentID() {
@@ -44,5 +54,5 @@ public class GradeCard extends RegisteredCourses {
 	public void setCgpa(Float cgpa) {
 		this.cgpa = cgpa;
 	}
-
+	
 }

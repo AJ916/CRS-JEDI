@@ -3,9 +3,9 @@ package com.flipkart.business;
 import com.flipkart.bean.GradeCard;
 import com.flipkart.bean.Professor;
 
-public class AdminBusiness {
+public class AdminOperations {
 
-	public AdminBusiness() {
+	public AdminOperations() {
 		// TODO Auto-generated constructor stub
 	}
 	void approveStudentRegistration(int studentId,int semesterId) {
@@ -23,9 +23,18 @@ public class AdminBusiness {
 	void removeProfessor(int professorID) {
 		
 	}
+	Float CalculateCgpa(GradeCard gc) {
+		return null;
+	}
 	GradeCard generateGradeCard(int studentID) {
 		return null;
 		
+	}
+	void sendFeePayNotification() {
+	}
+
+	void PaymentCompletionNotification() {
+
 	}
 	
 }
