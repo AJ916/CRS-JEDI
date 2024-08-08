@@ -23,8 +23,8 @@ public class Professor extends User{
 	public void setDesignation(String designation) {
 		this.designation = designation;
 	}
-	public Professor(Integer instructorID, String department, String designation) {
-		super();
+	public Professor(String userName, String name, String role, String password,Integer instructorID, String department, String designation) {
+		super(userName,name,role,password);
 		this.instructorID = instructorID;
 		this.department = department;
 		this.designation = designation;
