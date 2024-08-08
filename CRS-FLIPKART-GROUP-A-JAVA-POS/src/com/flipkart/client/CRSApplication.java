@@ -18,11 +18,15 @@ import java.util.Scanner;
 public class CRSApplication {
 	private StudentOperations studentOps ;
 	private ProfessorOperations profOps ;
+	private AdminOperations adminOps;
 	private Scanner sc ;
 
 	public CRSApplication(){
+
 		 studentOps = new StudentOperations();
 		 profOps = new ProfessorOperations();
+		 adminOps=new AdminOperations();
+
 		 sc= new Scanner(System.in);
 	}
 	public static void main(String[] args) {
@@ -70,6 +74,7 @@ public class CRSApplication {
 						break;
 					case 7:
 						showAllProfessors();
+						break;
 					case 8:
 						sc.close();
 						System.out.println("Exited Successfully!");
@@ -126,8 +131,11 @@ public class CRSApplication {
 			System.out.println("********************************");
 			System.out.println("Logged In Successfully as a Student");
 			System.out.println("Welcome " + username + " !!");
+
             CRSStudentMenu stud = new CRSStudentMenu();
-            stud.CreateStudentMenu(username);
+
+			Integer StudID= studentOps.getStudentIdByUsername(username);
+            stud.CreateStudentMenu(StudID);
 			System.out.println("Welcome " + username + " !!");
 			break;
 
@@ -184,10 +192,10 @@ public class CRSApplication {
 		String name = sc.nextLine();
 		System.out.println("enter Department");
 		String department = sc.nextLine();
-		System.out.println("enter instructorID");
-		int instructorID = sc.nextInt();
 		System.out.println("enter designation");
 		String designation = sc.nextLine();
+		System.out.println("enter instructorID");
+		int instructorID = sc.nextInt();
 
 		if(profOps.addProfessor(username,name,"professor",password,instructorID,department,designation)){
 			System.out.println("Professor Added Successfully");
@@ -196,7 +204,7 @@ public class CRSApplication {
 		}
 	}
 	void updatePassword() {
-		System.out.println("in upadte");
+		System.out.println("in update");
 		System.out.println("Enter your role: ");
 		String role = sc.nextLine();
 		switch (role) {
@@ -226,6 +234,7 @@ public class CRSApplication {
 				String username1 = sc.nextLine();
 				System.out.println("Enter your Password: ");
 				String password1 = sc.nextLine();
+
 				Professor currProf = profOps.findProfessorByUsername(username1);
 				if(currProf!=null){
 					if (currProf.getPassword().equals(password1)) {
@@ -245,21 +254,20 @@ public class CRSApplication {
 				String username2 = sc.nextLine();
 				System.out.println("Enter your Password: ");
 				String password2 = sc.nextLine();
-				AdminOperations admin = new AdminOperations();
-				Admin currAdmin= new Admin();
-				String pass= admin.findAdminByUsername(username2);
-				System.out.println(pass);
-				if (pass.equals(password2)) {
-					System.out.println("Enter your New Password: ");
-					String newPassword2 = sc.nextLine();
-					currAdmin.setPassword(newPassword2);
-					System.out.println("Successfully updated password");
-					System.out.println("Your new Password is: " + currAdmin.getPassword());
-				}
-				else {
-					System.out.println("Invalid Password");
-				}
 
+				Admin currAdmin= adminOps.findAdminByUsername(username2);
+
+				if (currAdmin!=null) {
+					if (currAdmin.getPassword().equals(password2)) {
+						System.out.println("Enter your New Password: ");
+						String newPassword2 = sc.nextLine();
+						currAdmin.setPassword(newPassword2);
+						System.out.println("Successfully updated password");
+						System.out.println("Your new Password is: " + currAdmin.getPassword());
+					} else {
+						System.out.println("Invalid Password");
+					}
+				}
 				break;
 
 			default:

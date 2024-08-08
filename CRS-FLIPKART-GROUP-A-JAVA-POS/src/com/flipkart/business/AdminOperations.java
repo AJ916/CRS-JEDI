@@ -1,69 +1,121 @@
 package com.flipkart.business;
 
+
 import com.flipkart.bean.Admin;
 import com.flipkart.bean.GradeCard;
 import com.flipkart.bean.Professor;
 import com.flipkart.bean.Student;
+import com.flipkart.bean.Course;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class AdminOperations {
+	private List<Admin> admins;
+	private List<Course> courseCatalogue;
+	private List<Professor> professors;
+	private List<Integer> approvedStudents;
+	private Map<Integer,GradeCard> gradeCards;
+//	private ProfessorOperations professorOps;
+
+
 
 	public AdminOperations() {
-		// TODO Auto-generated constructor stub
 
+
+		admins = new ArrayList<>();
+		approvedStudents=new ArrayList<>();
+
+		admins.add(new Admin("admin1","admin","admin","adminPass","1/1/2019"));
+
+		courseCatalogue = new ArrayList<>();
+		//adding courses to catalogue
+		courseCatalogue.add(new Course("C101","OOPS",null,10,10,true));
+		courseCatalogue.add(new Course("C102","DSA",null,10,10,true));
+		courseCatalogue.add(new Course("C103","DBMS",null,10,10,true));
+		courseCatalogue.add(new Course("C104","MuP",null,10,10,true));
 	}
-	List<Admin> admins=  new ArrayList<Admin>();
 
-	public void createAdmins(){
-		Admin admin1= new Admin();
-		admin1.setName("admin1");
-		admin1.setPassword("password");
-		admin1.setUserName("admin1");
-		admin1.setRole("admin");
-		admins.add(admin1);
-	}
 
-	public String findAdminByUsername(String userName){
-		createAdmins();
-
-		for(Admin admin1: admins){
-			if(admin1.getUserName().equals(userName)){
-				String pass= admin1.getPassword();
-				return pass;
+	public Admin findAdminByUsername(String userName){
+		for(Admin admin: admins){
+			if(admin.getUserName().equals(userName)){
+				return admin;
 			}
 		}
-//		System.out.println(userName);
 		return null;
-	}
-	void approveStudentRegistration(int studentId,int semesterId) {
 
 	}
-	void addCourse(String course_name, String courseID, int semester){
-		
+//	public Student findStudentById(int studentId) {
+//		// Return the student object based on studentId
+//
+//		for (Student student : students) {
+//			if (student.getStudentID() == studentId) {
+//				return student;
+//			}
+//		}
+//		return null; // Or handle the case when the student is not found
+//	}
+
+	public void approveStudentRegistration(int studentId) {
+		approvedStudents.add(studentId);
+		System.out.println("Student registration approved for student ID: " + studentId);
 	}
-	void removeCourse(String courseID) {
-		
+	List<Course> getCourseCatalogue() {
+		return courseCatalogue;
 	}
-	void addProfessor(Professor professor) {
-		
+	public void addCourse(String course_name, String courseID){
+			Course course = new Course(courseID,course_name,null,10,10,true);
+			courseCatalogue.add(course);
+			System.out.println("Course added successfully");
 	}
-	void removeProfessor(int professorID) {
-		
+
+	public void removeCourse(String courseID) {
+			courseCatalogue.removeIf(course -> course.getCourseID().equals(courseID));
+			System.out.println("Course removed successfully");
+	}
+
+	public void addProfessor(Professor professor) {
+
+	//		professorOps.getProfessors().add(professor);
+			System.out.println("Professor added successfully");
+
+	}
+
+	public void removeProfessor(int professorID) {
+//		professorOps = new ProfessorOperations();
+//		professors = professorOps.getProfessors();
+//		professors.removeIf(professor -> professor.getInstructorID().equals(professorID));
+//		System.out.println("Prof removed successfully");
+		professors.removeIf(professor -> professor.getInstructorID().equals(professorID));
+		System.out.println("Professor removed successfully");
 	}
 	Float CalculateCgpa(GradeCard gc) {
 		return null;
 	}
 	GradeCard generateGradeCard(int studentID) {
 		return null;
-		
-	}
-	void sendFeePayNotification() {
-	}
-
-	void PaymentCompletionNotification() {
 
 	}
-	
+	public Course findCourseById(String courseID) {
+		for (Course course : courseCatalogue) {
+			if (course.getCourseID().equals(courseID)) {
+				return course;
+			}
+		}
+		return null;
+	}
+	public void sendFeePayNotification() {
+	}
+
+	public void PaymentCompletionNotification() {
+
+	}
+
+	public void viewApprovedStudents() {
+		for(Integer studentID: approvedStudents){
+			System.out.println(studentID);
+		}
+	}
 }

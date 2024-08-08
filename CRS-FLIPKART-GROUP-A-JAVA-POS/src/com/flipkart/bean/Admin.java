@@ -11,8 +11,8 @@ public class Admin extends User{
         this.dateOfJoining = dateOfJoining;
     }
 
-    public Admin(String dateOfJoining) {
-        super();
+    public Admin(String userName, String name, String role, String password,String dateOfJoining) {
+        super(userName,name,role,password);
         this.dateOfJoining = dateOfJoining;
     }
     public Admin() {

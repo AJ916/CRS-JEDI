@@ -1,5 +1,8 @@
 package com.flipkart.bean;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Course {
 
 	private String courseID;
@@ -8,6 +11,7 @@ public class Course {
 	private Integer totalSeats;
 	private Integer availableSeats;
 	private boolean isOffered;
+	private List<Integer> enrolledStudents;
 
 	public String getCourseID() {
 		return courseID;
@@ -58,6 +62,20 @@ public class Course {
 	public void setOffered(boolean isOffered) {
 		this.isOffered = isOffered;
 	}
+	public List<Integer> getEnrolledStudents() {
+		return enrolledStudents;
+	}
+	public void addStudent(Integer studentID) {
+		if (!enrolledStudents.contains(studentID)) {
+			enrolledStudents.add(studentID);
+			availableSeats--; // Decrease available seats
+		}
+	}
+	public void removeStudent(Integer studentID) {
+		if (enrolledStudents.remove(studentID)) {
+			availableSeats++; // Increase available seats
+		}
+	}
 
 	public Course(String courseID, String coursename, String instructorID, Integer totalSeats, Integer availableSeats,
 			boolean isOffered) {
@@ -68,10 +86,12 @@ public class Course {
 		this.totalSeats = totalSeats;
 		this.availableSeats = availableSeats;
 		this.isOffered = isOffered;
+		this.enrolledStudents = new ArrayList<>();
 	}
 
 	public Course() {
 		super();
+		this.enrolledStudents = new ArrayList<>(); // Initialize the list
 	}
 
 }

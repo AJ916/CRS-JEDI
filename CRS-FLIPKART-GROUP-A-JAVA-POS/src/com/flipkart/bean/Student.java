@@ -6,12 +6,12 @@ public class Student extends User{
 
 	private Integer studentID;
 	private String department;
-	private ArrayList<String> courseID = new ArrayList<String>();
-	public Student(String userName, String name, String role, String password,Integer studentID, String department, ArrayList<String> courseID) {
+	private ArrayList<String> RegisteredCourses = new ArrayList<String>();
+	public Student(String userName, String name, String role, String password,Integer studentID, String department, ArrayList<String> RegisteredCourses) {
 		super(userName,name,role,password);
 		this.studentID = studentID;
 		this.department = department;
-		this.courseID = courseID;
+		this.RegisteredCourses = RegisteredCourses;
 	}
 	public Student() {
 		super();
@@ -33,12 +33,12 @@ public class Student extends User{
 		this.department = department;
 	}
 
-	public ArrayList<String> getCourseID() {
-		return courseID;
+	public ArrayList<String> getRegisteredCourses() {
+		return RegisteredCourses;
 	}
 
-	public void setCourseID(ArrayList<String> courseID) {
-		this.courseID = courseID;
+	public void setRegisteredCourses(ArrayList<String> registeredCourses) {
+		this.RegisteredCourses = registeredCourses;
 	}
 	
 	
