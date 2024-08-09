@@ -13,16 +13,16 @@ public class StudentOperations {
 	private List<Student> students;
 	private AdminOperations adminOps;
 
-public StudentOperations(){
-	students = new ArrayList<>();
-	adminOps= new AdminOperations();
-	ArrayList<String> courses = new ArrayList<>();
-	courses.add("C101");
-	courses.add("C102");
-	students.add(new Student("nikhil1", "nikhil", "student", "pass", 102, "CS", courses));
-	students.add(new Student("ajey1","ajey","student","pass",101,"CS",null));
-	students.add(new Student("kunal1","kunal","student","pass",103,"CS",null));
-}
+	public StudentOperations(){
+		students = new ArrayList<>();
+		adminOps= new AdminOperations();
+		ArrayList<String> courses = new ArrayList<>();
+		courses.add("C101");
+		courses.add("C102");
+		students.add(new Student("nikhil1", "nikhil", "student", "pass", 102, "CS", courses));
+		students.add(new Student("ajey1","ajey","student","pass",101,"CS",null));
+		students.add(new Student("kunal1","kunal","student","pass",103,"CS",null));
+	}
 
 	public List<Student> getStudents() {
 		return students;
@@ -33,8 +33,8 @@ public StudentOperations(){
 			students.add(new Student(userName,name,role,password,studentID,department,null));
 			return true;
 		}
-        return false;
-    }
+		return false;
+	}
 	public Student findStudentByUsername(String userName){
 		for (Student student : students) {
 			if(student.getUserName().equals(userName)){
@@ -44,7 +44,7 @@ public StudentOperations(){
 		return null;
 	}
 
-//	public void registerCourses(int studentId, String courseId) {
+	//	public void registerCourses(int studentId, String courseId) {
 //		Student student = findStudentById(studentId);
 //		List<Course> availableCourses = adminOps.getCourseCatalogue();
 //		if (student != null) {
@@ -77,7 +77,7 @@ public StudentOperations(){
 			System.out.println("Student or Course not found.");
 		}
 	}
-//	public boolean addCourse(int studentId, String courseId) {
+	//	public boolean addCourse(int studentId, String courseId) {
 //		Student student = findStudentById(studentId);
 //		List<Course> availableCourses = adminOps.getCourseCatalogue();
 //		if (student != null) {
@@ -114,9 +114,9 @@ public StudentOperations(){
 		} else {
 			System.out.println("Student or Course not found.");
 		}
-}
+	}
 
-//	public boolean dropCourse(int studentId, String courseId) {
+	//	public boolean dropCourse(int studentId, String courseId) {
 //		Student student = findStudentById(studentId);
 //
 //		if (student != null) {
@@ -138,21 +138,21 @@ public StudentOperations(){
 //		}
 //		return false;
 //	}
-public void dropCourse(int studentId, String courseId) {
-	Student student = findStudentById(studentId);
-	Course course = findCourseById(courseId);
+	public void dropCourse(int studentId, String courseId) {
+		Student student = findStudentById(studentId);
+		Course course = findCourseById(courseId);
 
-	if (student != null && course != null) {
-		if (student.getRegisteredCourses().remove(courseId)) {
-			course.removeStudent(studentId); // Remove student from course
-			System.out.println("Course dropped successfully.");
+		if (student != null && course != null) {
+			if (student.getRegisteredCourses().remove(courseId)) {
+				course.removeStudent(studentId); // Remove student from course
+				System.out.println("Course dropped successfully.");
+			} else {
+				System.out.println("Course not found in student's list.");
+			}
 		} else {
-			System.out.println("Course not found in student's list.");
+			System.out.println("Student or Course not found.");
 		}
-	} else {
-		System.out.println("Student or Course not found.");
 	}
-}
 
 	public boolean finishRegistration() {
 		System.out.println("Registration complete.");
@@ -224,7 +224,7 @@ public void dropCourse(int studentId, String courseId) {
 	}
 	public void viewStudents() {
 		for (Student student : students) {
-			System.out.println(student.getStudentID()+" "+student.getDepartment()+" "+student.getName()+" "+student.getUserName());
+			System.out.println(student.getStudentID()+" "+student.getDepartment()+" "+student.getName()+" "+student.getUserName()+" "+ student.getPassword());
 		}
 	}
 }

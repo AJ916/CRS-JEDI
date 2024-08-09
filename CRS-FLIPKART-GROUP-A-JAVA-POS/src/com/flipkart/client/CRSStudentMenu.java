@@ -35,36 +35,36 @@ public class CRSStudentMenu {
 			System.out.println("*********************************************************");
 			input =sc.nextInt();
 			switch (input) {
-			case 1:
-				registerCourses(studentId);
-				break;
-			case 2:
-				addCourse(studentId);
-				break;
-			case 3:
-				dropCourse(studentId);
-				break;
+				case 1:
+					registerCourses(studentId);
+					break;
+				case 2:
+					addCourse(studentId);
+					break;
+				case 3:
+					dropCourse(studentId);
+					break;
 
-			case 4:
-				finishRegistration(studentId);
-				break;
-			case 5:
-				viewRegisteredCourses(studentId);
-				break;
-			case 6:
-				viewReportCard(studentId);
-				break;
-			case 7:
-				checkPaymentWindow(studentId);
-				break;
-			case 8:
-				doPayment(studentId);
-				break;
-			case 9:
+				case 4:
+					finishRegistration(studentId);
+					break;
+				case 5:
+					viewRegisteredCourses(studentId);
+					break;
+				case 6:
+					viewReportCard(studentId);
+					break;
+				case 7:
+					checkPaymentWindow(studentId);
+					break;
+				case 8:
+					doPayment(studentId);
+					break;
+				case 9:
 //				System.exit(0);
-				return;
-			default:
-				System.out.println("***** Wrong Choice *****");
+					return;
+				default:
+					System.out.println("***** Wrong Choice *****");
 			}
 		}
 	}

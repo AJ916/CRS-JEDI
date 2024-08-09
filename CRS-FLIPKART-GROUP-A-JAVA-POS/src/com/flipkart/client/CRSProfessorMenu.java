@@ -49,7 +49,7 @@ public class CRSProfessorMenu {
 					//logout from the system
 					return;
 //					System.exit(0);
-			default:
+				default:
 					System.out.println("***** Wrong Choice *****");
 			}
 		}
@@ -62,28 +62,28 @@ public class CRSProfessorMenu {
 		String courseID = sc.nextLine();
 		professorOps.viewEnrolledStudents(courseID);
 	}
-		public void addGrade(String profId) {
-			System.out.println("Adding grades");
-			Scanner sc = new Scanner(System.in);
-			System.out.println("Enter Student ID:");
-			Integer studentID = sc.nextInt();
-			sc.nextLine();  // consume the newline
-			System.out.println("Enter Course ID:");
-			String courseID = sc.nextLine();
-			System.out.println("Enter Grade:");
-			String alphaGrade = sc.nextLine();
-			professorOps.addGrade(studentID, courseID, alphaGrade);
-		}
-		public void courseSelection(String profId) {
-			System.out.println("Viewing courses for selection");
-			Scanner sc = new Scanner(System.in);
-			System.out.println("Enter Instructor ID:");
-			Integer instructorID = sc.nextInt();
-			sc.nextLine();  // consume the newline
-			System.out.println("Enter Course ID:");
-			String courseID = sc.nextLine();
-			professorOps.courseSelection(instructorID, courseID);
-		}
+	public void addGrade(String profId) {
+		System.out.println("Adding grades");
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Enter Student ID:");
+		Integer studentID = sc.nextInt();
+		sc.nextLine();  // consume the newline
+		System.out.println("Enter Course ID:");
+		String courseID = sc.nextLine();
+		System.out.println("Enter Grade:");
+		String alphaGrade = sc.nextLine();
+		professorOps.addGrade(studentID, courseID, alphaGrade);
+	}
+	public void courseSelection(String profId) {
+		System.out.println("Viewing courses for selection");
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Enter Instructor ID:");
+		Integer instructorID = sc.nextInt();
+		sc.nextLine();  // consume the newline
+		System.out.println("Enter Course ID:");
+		String courseID = sc.nextLine();
+		professorOps.courseSelection(instructorID, courseID);
+	}
 
 }
 

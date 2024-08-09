@@ -33,32 +33,32 @@ public class CRSAdminMenu {
 			System.out.println("*********************************************************");
 			input =sc.nextInt();
 			switch (input) {
-			case 1:
-				approveStudentRegistration(AdminId);
-				break;
-			case 2:
-				addCourse(AdminId);
-				break;
-			case 3:
-				removeCourse(AdminId);
-				break;
-			case 4:
-				addProfessor(AdminId);
-				break;
-			case 5:
-				removeProfessor(AdminId);
-				break;
-			case 6:
-				sendFeePayNotification(AdminId);
-				break;
-			case 7:
-				viewApprovedStudents(AdminId);
-				break;
-			case 8:
-				return;
+				case 1:
+					approveStudentRegistration(AdminId);
+					break;
+				case 2:
+					addCourse(AdminId);
+					break;
+				case 3:
+					removeCourse(AdminId);
+					break;
+				case 4:
+					addProfessor(AdminId);
+					break;
+				case 5:
+					removeProfessor(AdminId);
+					break;
+				case 6:
+					sendFeePayNotification(AdminId);
+					break;
+				case 7:
+					viewApprovedStudents(AdminId);
+					break;
+				case 8:
+					return;
 //				System.exit(0);
-			default:
-				System.out.println("***** Wrong Choice *****");
+				default:
+					System.out.println("***** Wrong Choice *****");
 			}
 		}
 	}

@@ -11,18 +11,26 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class ProfessorOperations {
-	private List<Professor> professors;
+	//	private List<Professor> professors;
+	private static List<Professor> professors = new ArrayList<>();
 	private AdminOperations adminOps;
 	private StudentOperations studentOps;
 	private List<Grade> grades;
 	public ProfessorOperations() {
-		professors = new ArrayList<>();
+		//professors = new ArrayList<>();
 		professors.add(new Professor("parth1", "parth", "professor", "pass", 1, "CS", "Senior"));
 		professors.add(new Professor("ansh1", "ansh", "professor", "pass", 2, "CS", "Senior"));
 		grades = new ArrayList<>();
 		adminOps = new AdminOperations();
 		studentOps = new StudentOperations();
 	}
+	private String identifier;
+	// Constructor with an argument
+	public ProfessorOperations(String identifier) {
+		this.identifier = identifier;
+
+	}
+
 	public List<Professor> getProfessors() {
 		return professors;
 	}
@@ -56,7 +64,7 @@ public class ProfessorOperations {
 //		grades.add(new Grade(studentID, courseID, alphaGrade));
 //		System.out.println("Grade added successfully for student ID: " + studentID);
 	}
-//	public void viewEnrolledStudents(String courseID) {
+	//	public void viewEnrolledStudents(String courseID) {
 //		List<Student> students = adminOps.getCourseCatalogue().stream()
 //				.filter(course -> course.getCourseID().equals(courseID))
 //				.flatMap(course -> course.getEnrolledStudents().stream()
@@ -101,6 +109,13 @@ public class ProfessorOperations {
 			Course course = adminOps.findCourseById(courseID);
 			if (course != null) {
 				course.setInstructorID(professor.getUserName()); // Set instructorID to professor's username
+				List<Course> x= adminOps.getCourseCatalogue();
+				for(Course course1: x){
+					Boolean ismatch = course1.getCourseID().equals(courseID);
+					if(ismatch){
+						course1.setInstructorID(Integer.toString(instructorID));
+					}
+				}
 				System.out.println("Course " + courseID + " assigned to Professor " + professor.getName());
 			} else {
 				System.out.println("Course not found.");
@@ -111,7 +126,7 @@ public class ProfessorOperations {
 	}
 	public void viewProfessors() {
 		for (Professor professor : professors) {
-			System.out.println(professor.getInstructorID() + " " + professor.getDepartment() + " " + professor.getName() + " " + professor.getUserName());
+			System.out.println(professor.getInstructorID() + " " + professor.getDepartment() + " " + professor.getName() + " " + professor.getUserName()+ " "+ professor.getPassword());
 		}
 	}
 	private Professor findProfessorByID(Integer instructorID) {
@@ -123,3 +138,4 @@ public class ProfessorOperations {
 		return null;
 	}
 }
+

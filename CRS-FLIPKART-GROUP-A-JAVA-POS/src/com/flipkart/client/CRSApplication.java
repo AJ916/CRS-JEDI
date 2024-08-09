@@ -1,19 +1,21 @@
 /**
- * 
+ *
  */
 package com.flipkart.client;
 
 import com.flipkart.bean.Admin;
+import com.flipkart.bean.Course;
 import com.flipkart.bean.Professor;
 import com.flipkart.bean.Student;
 import com.flipkart.business.AdminOperations;
 import com.flipkart.business.ProfessorOperations;
 import com.flipkart.business.StudentOperations;
 
+import java.util.List;
 import java.util.Scanner;
 
 /**
- * 
+ *
  */
 public class CRSApplication {
 	private StudentOperations studentOps ;
@@ -23,11 +25,11 @@ public class CRSApplication {
 
 	public CRSApplication(){
 
-		 studentOps = new StudentOperations();
-		 profOps = new ProfessorOperations();
-		 adminOps=new AdminOperations();
+		studentOps = new StudentOperations();
+		profOps = new ProfessorOperations();
+		adminOps=new AdminOperations();
 
-		 sc= new Scanner(System.in);
+		sc= new Scanner(System.in);
 	}
 	public static void main(String[] args) {
 		CRSApplication newUser = new CRSApplication();
@@ -40,7 +42,7 @@ public class CRSApplication {
 			System.out.println("\nChoose an option from the menu: ");
 			System.out.println("---------------------------------------");
 			System.out.println("Press 1: Login");
-			System.out.println("Press 2: Student Registration");
+			System.out.println("Press 2: View Courses List");
 			System.out.println("Press 3: Update Password");
 			System.out.println("Press 4: Add Student");
 			System.out.println("Press 5: Show all students");
@@ -50,38 +52,38 @@ public class CRSApplication {
 			System.out.println("*********************************************************");
 			int menuOption = sc.nextInt();
 			sc.nextLine();
-				switch (menuOption) {
-					case 1:
-						login();
-						break;
+			switch (menuOption) {
+				case 1:
+					login();
+					break;
 
-					case 2:
-						registerStudent();
-						break;
+				case 2:
+					courseByProfList();
+					break;
 
-					case 3:
-						updatePassword();
-						break;
+				case 3:
+					updatePassword();
+					break;
 
-					case 4:
-						addStudent();
-						break;
-					case 5:
-						showAllStudents();
-						break;
-					case 6:
-						addProfessor();
-						break;
-					case 7:
-						showAllProfessors();
-						break;
-					case 8:
-						sc.close();
-						System.out.println("Exited Successfully!");
-						return;
-					default:
-						System.out.println("Invalid input");
-						break;
+				case 4:
+					addStudent();
+					break;
+				case 5:
+					showAllStudents();
+					break;
+				case 6:
+					addProfessor();
+					break;
+				case 7:
+					showAllProfessors();
+					break;
+				case 8:
+					sc.close();
+					System.out.println("Exited Successfully!");
+					return;
+				default:
+					System.out.println("Invalid input");
+					break;
 			}
 		}
 	}
@@ -112,59 +114,84 @@ public class CRSApplication {
 
 		int roleOption = sc.nextInt();
 		switch (roleOption) {
-		case 1:
-			role = "student";
-			break;
+			case 1:
+				role = "student";
+				break;
 
-		case 2:
-			role = "professor";
-			break;
+			case 2:
+				role = "professor";
+				break;
 
-		case 3:
-			role = "admin";
-			break;
-		default:
-			System.out.println("Invalid option");
+			case 3:
+				role = "admin";
+				break;
+			default:
+				System.out.println("Invalid option");
 		}
 		switch (role) {
-		case "student":
-			System.out.println("********************************");
-			System.out.println("Logged In Successfully as a Student");
-			System.out.println("Welcome " + username + " !!");
+			case "student":
+				System.out.println("********************************");
+				System.out.println("Logged In Successfully as a Student");
+				System.out.println("Welcome " + username + " !!");
 
-            CRSStudentMenu stud = new CRSStudentMenu();
+				CRSStudentMenu stud = new CRSStudentMenu();
 
-			Integer StudID= studentOps.getStudentIdByUsername(username);
-            stud.CreateStudentMenu(StudID);
-			System.out.println("Welcome " + username + " !!");
-			break;
+				Integer StudID= studentOps.getStudentIdByUsername(username);
+				stud.CreateStudentMenu(StudID);
+				System.out.println("Welcome " + username + " !!");
+				break;
 
-		case "professor":
-			System.out.println("********************************");
-			System.out.println("Logged In Successfully as a Professor");
-			System.out.println("Welcome " + username +" Sir!");
-            CRSProfessorMenu prof = new CRSProfessorMenu();
-            prof.CreateProfessorMenu(username);
-			System.out.println("Welcome " + username + " Sir!");
-			break;
+			case "professor":
+				System.out.println("********************************");
+				System.out.println("Logged In Successfully as a Professor");
+				System.out.println("Welcome " + username +" Sir!");
+				CRSProfessorMenu prof = new CRSProfessorMenu();
+				prof.CreateProfessorMenu(username);
+				System.out.println("Welcome " + username + " Sir!");
+				break;
 
-		case "admin":
-			System.out.println("********************************");
-			System.out.println("Logged In Successfully as an Admin");
-			System.out.println("Welcome " + username + " !!");
-            CRSAdminMenu adm = new CRSAdminMenu();
-            adm.CreateAdminMenu(username);
-			System.out.println("Welcome " + username + " Sir!");
-			break;
+			case "admin":
+				System.out.println("********************************");
+				System.out.println("Logged In Successfully as an Admin");
+				System.out.println("Welcome " + username + " !!");
+				CRSAdminMenu adm = new CRSAdminMenu();
+				adm.CreateAdminMenu(username);
+				System.out.println("Welcome " + username + " Sir!");
+				break;
 
-		default:
-			System.out.println("Invalid Role");
-			System.out.println("********************************");
+			default:
+				System.out.println("Invalid Role");
+				System.out.println("********************************");
 		}
 	}
-	void registerStudent() {
-		System.out.println("in register");
+	void courseByProfList() {
+		// Retrieve the list of all courses from adminOps
+		List<Course> courseCatalogue = adminOps.getCourseCatalogue();
+
+		// Check if courseCatalogue is null or empty
+		if (courseCatalogue == null || courseCatalogue.isEmpty()) {
+			System.out.println("No courses available.");
+			return;
+		}
+
+		// Print each course with its Course ID and Instructor ID
+		System.out.println("Courses and their Instructor IDs:");
+		for (Course course : courseCatalogue) {
+			String courseID = course.getCourseID();
+			String instructorID = course.getInstructorID(); // Assuming this is the ID of the instructor
+
+			// Check if instructorID is null and print appropriate message
+			String instructorMessage = (instructorID != null && !instructorID.isEmpty()) ? instructorID : "No instructor assigned";
+
+			System.out.println("Course ID: " + courseID + ", Instructor ID: " + instructorMessage);
+		}
+
+		System.out.println("End of course list.");
 	}
+
+
+
+
 	void addStudent() {
 		System.out.println("enter Username");
 		String username = sc.nextLine();

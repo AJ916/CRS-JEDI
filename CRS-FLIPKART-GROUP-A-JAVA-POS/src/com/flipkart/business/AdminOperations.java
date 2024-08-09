@@ -17,7 +17,7 @@ public class AdminOperations {
 	private List<Professor> professors;
 	private List<Integer> approvedStudents;
 	private Map<Integer,GradeCard> gradeCards;
-//	private ProfessorOperations professorOps;
+	private ProfessorOperations professorOps;
 
 
 
@@ -26,7 +26,7 @@ public class AdminOperations {
 
 		admins = new ArrayList<>();
 		approvedStudents=new ArrayList<>();
-
+		professorOps = new ProfessorOperations("admin");
 		admins.add(new Admin("admin1","admin","admin","adminPass","1/1/2019"));
 
 		courseCatalogue = new ArrayList<>();
@@ -62,30 +62,31 @@ public class AdminOperations {
 		approvedStudents.add(studentId);
 		System.out.println("Student registration approved for student ID: " + studentId);
 	}
-	List<Course> getCourseCatalogue() {
+	public List<Course> getCourseCatalogue() {
+
 		return courseCatalogue;
 	}
 	public void addCourse(String course_name, String courseID){
-			Course course = new Course(courseID,course_name,null,10,10,true);
-			courseCatalogue.add(course);
-			System.out.println("Course added successfully");
+		Course course = new Course(courseID,course_name,null,10,10,true);
+		courseCatalogue.add(course);
+		System.out.println("Course added successfully");
 	}
 
 	public void removeCourse(String courseID) {
-			courseCatalogue.removeIf(course -> course.getCourseID().equals(courseID));
-			System.out.println("Course removed successfully");
+		courseCatalogue.removeIf(course -> course.getCourseID().equals(courseID));
+		System.out.println("Course removed successfully");
 	}
 
 	public void addProfessor(Professor professor) {
 
-	//		professorOps.getProfessors().add(professor);
-			System.out.println("Professor added successfully");
+		professorOps.getProfessors().add(professor);
+		System.out.println("Professor added successfully");
 
 	}
 
 	public void removeProfessor(int professorID) {
 //		professorOps = new ProfessorOperations();
-//		professors = professorOps.getProfessors();
+		professors = professorOps.getProfessors();
 //		professors.removeIf(professor -> professor.getInstructorID().equals(professorID));
 //		System.out.println("Prof removed successfully");
 		professors.removeIf(professor -> professor.getInstructorID().equals(professorID));
