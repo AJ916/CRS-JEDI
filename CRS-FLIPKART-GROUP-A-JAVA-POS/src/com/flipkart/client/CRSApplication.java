@@ -10,6 +10,7 @@ import com.flipkart.bean.Student;
 import com.flipkart.business.AdminOperations;
 import com.flipkart.business.ProfessorOperations;
 import com.flipkart.business.StudentOperations;
+import com.flipkart.dao.UserDaoOps;
 
 import java.util.List;
 import java.util.Scanner;
@@ -22,13 +23,14 @@ public class CRSApplication {
 	private ProfessorOperations profOps ;
 	private AdminOperations adminOps;
 	private Scanner sc ;
+	private UserDaoOps userDaoOps;
 
 	public CRSApplication(){
 
 		studentOps = new StudentOperations();
 		profOps = new ProfessorOperations();
 		adminOps=new AdminOperations();
-
+		userDaoOps=new UserDaoOps();
 		sc= new Scanner(System.in);
 	}
 	public static void main(String[] args) {
@@ -95,11 +97,10 @@ public class CRSApplication {
 		profOps.viewProfessors();
 	}
 
-
 	private void login() {
 
-		String username=null;
-		String password=null;
+		String username = null;
+		String password = null;
 		String role = null;
 
 		System.out.println("********************************");
@@ -107,44 +108,39 @@ public class CRSApplication {
 		username = sc.nextLine();
 		System.out.println("Enter your Password: ");
 		password = sc.nextLine();
-		System.out.println("Choose your Role: ");
-		System.out.println("Press 1 for Student");
-		System.out.println("Press 2 for Professor");
-		System.out.println("Press 3 for Admin");
 
-		int roleOption = sc.nextInt();
-		switch (roleOption) {
-			case 1:
-				role = "student";
-				break;
+		// Call the getRolebyLogin method
+		role = userDaoOps.getRolebyLogin(username);
 
-			case 2:
-				role = "professor";
-				break;
-
-			case 3:
-				role = "admin";
-				break;
-			default:
-				System.out.println("Invalid option");
+		if (role == null) {
+			System.out.println("Invalid credentials or user not found.");
+			return;
 		}
+
+
+
+
 		switch (role) {
-			case "student":
+			case "Student":
+				if(userDaoOps.isApproved(username)){
 				System.out.println("********************************");
 				System.out.println("Logged In Successfully as a Student");
 				System.out.println("Welcome " + username + " !!");
 
 				CRSStudentMenu stud = new CRSStudentMenu();
-
-				Integer StudID= studentOps.getStudentIdByUsername(username);
-				stud.CreateStudentMenu(StudID);
+				Integer studID = studentOps.getStudentIdByUsername(username);
+				stud.CreateStudentMenu(studID);
 				System.out.println("Welcome " + username + " !!");
-				break;
+				break;}
+				else{
+					System.out.println("you are not approved");
+					break;
+				}
 
 			case "professor":
 				System.out.println("********************************");
 				System.out.println("Logged In Successfully as a Professor");
-				System.out.println("Welcome " + username +" Sir!");
+				System.out.println("Welcome " + username + " Sir!");
 				CRSProfessorMenu prof = new CRSProfessorMenu();
 				prof.CreateProfessorMenu(username);
 				System.out.println("Welcome " + username + " Sir!");
@@ -162,8 +158,79 @@ public class CRSApplication {
 			default:
 				System.out.println("Invalid Role");
 				System.out.println("********************************");
+				break;
 		}
 	}
+
+//	private void login() {
+//
+//		String username=null;
+//		String password=null;
+//		String role = null;
+//
+//		System.out.println("********************************");
+//		System.out.println("Enter your Username: ");
+//		username = sc.nextLine();
+//		System.out.println("Enter your Password: ");
+//		password = sc.nextLine();
+////		System.out.println("Choose your Role: ");
+////		System.out.println("Press 1 for Student");
+////		System.out.println("Press 2 for Professor");
+////		System.out.println("Press 3 for Admin");
+//
+////		int roleOption = sc.nextInt();
+//		String roleOption= UserDaoOps.getRolebyLogin(username);
+//		switch (roleOption) {
+//			case 1:
+//				role = "student";
+//				break;
+//
+//			case 2:
+//				role = "professor";
+//				break;
+//
+//			case 3:
+//				role = "admin";
+//				break;
+//			default:
+//				System.out.println("Invalid option");
+//		}
+//		switch (role) {
+//			case "student":
+//				System.out.println("********************************");
+//				System.out.println("Logged In Successfully as a Student");
+//				System.out.println("Welcome " + username + " !!");
+//
+//				CRSStudentMenu stud = new CRSStudentMenu();
+//
+//				Integer StudID= studentOps.getStudentIdByUsername(username);
+//				stud.CreateStudentMenu(StudID);
+//				System.out.println("Welcome " + username + " !!");
+//				break;
+//
+//			case "professor":
+//				System.out.println("********************************");
+//				System.out.println("Logged In Successfully as a Professor");
+//				System.out.println("Welcome " + username +" Sir!");
+//				CRSProfessorMenu prof = new CRSProfessorMenu();
+//				prof.CreateProfessorMenu(username);
+//				System.out.println("Welcome " + username + " Sir!");
+//				break;
+//
+//			case "admin":
+//				System.out.println("********************************");
+//				System.out.println("Logged In Successfully as an Admin");
+//				System.out.println("Welcome " + username + " !!");
+//				CRSAdminMenu adm = new CRSAdminMenu();
+//				adm.CreateAdminMenu(username);
+//				System.out.println("Welcome " + username + " Sir!");
+//				break;
+//
+//			default:
+//				System.out.println("Invalid Role");
+//				System.out.println("********************************");
+//		}
+//	}
 	void courseByProfList() {
 		// Retrieve the list of all courses from adminOps
 		List<Course> courseCatalogue = adminOps.getCourseCatalogue();
