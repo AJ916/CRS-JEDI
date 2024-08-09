@@ -3,17 +3,26 @@ package com.flipkart.business;
 import com.flipkart.bean.Admin;
 import com.flipkart.bean.Professor;
 import com.flipkart.bean.Student;
+import com.flipkart.dao.UserDaoOps;
 
 public class UserOperations {
 
 	private AdminOperations adminOps;
 	private ProfessorOperations professorOps;
 	private StudentOperations studentOps;
+	private UserDaoOps userDaoOps;
 
 	public UserOperations() {
 		adminOps = new AdminOperations();
 		professorOps = new ProfessorOperations();
 		studentOps = new StudentOperations();
+		userDaoOps = new UserDaoOps();
+	}
+	public String getRolebyLogin(String username) {
+		return userDaoOps.getRolebyLogin(username);
+	}
+	public boolean isApproved(String username){
+		return userDaoOps.isApproved(username);
 	}
 	boolean loginUser(String userID, String password, String role) {
         return switch (role.toLowerCase()) {
@@ -32,6 +41,7 @@ public class UserOperations {
             default -> false;
         };
 	}
+
 	void updateStudentPassword(String userID, String newPassword) {
 		Student student = studentOps.findStudentByUsername(userID);
 		if (student != null) {

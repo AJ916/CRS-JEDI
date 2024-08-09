@@ -10,7 +10,8 @@ import com.flipkart.bean.Student;
 import com.flipkart.business.AdminOperations;
 import com.flipkart.business.ProfessorOperations;
 import com.flipkart.business.StudentOperations;
-import com.flipkart.dao.UserDaoOps;
+import com.flipkart.business.UserOperations;
+//import com.flipkart.dao.UserDaoOps;
 
 import java.util.List;
 import java.util.Scanner;
@@ -23,14 +24,14 @@ public class CRSApplication {
 	private ProfessorOperations profOps ;
 	private AdminOperations adminOps;
 	private Scanner sc ;
-	private UserDaoOps userDaoOps;
+	private UserOperations userOps;
 
 	public CRSApplication(){
 
 		studentOps = new StudentOperations();
 		profOps = new ProfessorOperations();
 		adminOps=new AdminOperations();
-		userDaoOps=new UserDaoOps();
+		userOps=new UserOperations();
 		sc= new Scanner(System.in);
 	}
 	public static void main(String[] args) {
@@ -110,7 +111,7 @@ public class CRSApplication {
 		password = sc.nextLine();
 
 		// Call the getRolebyLogin method
-		role = userDaoOps.getRolebyLogin(username);
+		role = userOps.getRolebyLogin(username);
 
 		if (role == null) {
 			System.out.println("Invalid credentials or user not found.");
@@ -122,7 +123,7 @@ public class CRSApplication {
 
 		switch (role) {
 			case "Student":
-				if(userDaoOps.isApproved(username)){
+				if(userOps.isApproved(username)){
 				System.out.println("********************************");
 				System.out.println("Logged In Successfully as a Student");
 				System.out.println("Welcome " + username + " !!");
