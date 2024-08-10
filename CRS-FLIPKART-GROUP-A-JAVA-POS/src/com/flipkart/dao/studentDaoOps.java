@@ -12,7 +12,7 @@ public class studentDaoOps {
             // Database connection details
             String url = "jdbc:mysql://localhost:3306/db1"; // Replace with your database name
             String user = "root"; // Replace with your MySQL username
-            String password = "Thanos8#yuoto"; // Replace with your MySQL password
+            String password = "Jaatraaj@700"; // Replace with your MySQL password
 
             // Establish the connection
             conn = DriverManager.getConnection(url, user, password);
@@ -52,7 +52,7 @@ public class studentDaoOps {
 
                             int studentAffectedRows = studentPstmt.executeUpdate();
                             if (studentAffectedRows > 0) {
-                                System.out.println("Student record added successfully.");
+                                System.out.println("Student record updated.");
                             } else {
                                 System.out.println("Student record insertion failed.");
                                 return -1;

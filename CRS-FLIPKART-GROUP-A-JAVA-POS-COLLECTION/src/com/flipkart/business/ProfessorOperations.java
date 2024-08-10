@@ -35,9 +35,9 @@ public class ProfessorOperations {
 		return professors;
 	}
 
-	public boolean addProfessor(String userName, String name, String role, String password, Integer instructorID, String department, String designation) {
+	public boolean addProfessor(String userName, String name, String role, String password, Integer professorId, String department, String designation) {
 		if (findProfessorByUsername(userName) == null) {
-			professors.add(new Professor(userName, name, role, password, instructorID, department, designation));
+			professors.add(new Professor(userName, name, role, password, professorId, department, designation));
 			return true;
 		}
 		return false;
@@ -52,7 +52,7 @@ public class ProfessorOperations {
 	}
 	public void getCourses(String profID) {
 		List<Course> courses = adminOps.getCourseCatalogue().stream()
-				.filter(course -> course.getInstructorID() != null && course.getInstructorID().equals(profID))
+				.filter(course -> course.getprofessorId() != null && course.getprofessorId().equals(profID))
 				.toList();
 		System.out.println("Courses taught by Professor with ID " + profID + ":");
 		for (Course course : courses) {
@@ -103,17 +103,17 @@ public class ProfessorOperations {
 		}
 	}
 
-	public void courseSelection(Integer instructorID, String courseID) {
-		Professor professor = findProfessorByID(instructorID);
+	public void courseSelection(Integer professorId, String courseID) {
+		Professor professor = findProfessorByID(professorId);
 		if (professor != null) {
 			Course course = adminOps.findCourseById(courseID);
 			if (course != null) {
-				course.setInstructorID(professor.getUserName()); // Set instructorID to professor's username
+				course.setprofessorId(professor.getUserName()); // Set professorId to professor's username
 				List<Course> x= adminOps.getCourseCatalogue();
 				for(Course course1: x){
 					Boolean ismatch = course1.getCourseID().equals(courseID);
 					if(ismatch){
-						course1.setInstructorID(Integer.toString(instructorID));
+						course1.setprofessorId(Integer.toString(professorId));
 					}
 				}
 				System.out.println("Course " + courseID + " assigned to Professor " + professor.getName());
@@ -126,12 +126,12 @@ public class ProfessorOperations {
 	}
 	public void viewProfessors() {
 		for (Professor professor : professors) {
-			System.out.println(professor.getInstructorID() + " " + professor.getDepartment() + " " + professor.getName() + " " + professor.getUserName()+ " "+ professor.getPassword());
+			System.out.println(professor.getprofessorId() + " " + professor.getDepartment() + " " + professor.getName() + " " + professor.getUserName()+ " "+ professor.getPassword());
 		}
 	}
-	private Professor findProfessorByID(Integer instructorID) {
+	private Professor findProfessorByID(Integer professorId) {
 		for (Professor professor : professors) {
-			if (professor.getInstructorID().equals(instructorID)) {
+			if (professor.getprofessorId().equals(professorId)) {
 				return professor;
 			}
 		}

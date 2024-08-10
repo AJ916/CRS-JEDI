@@ -7,7 +7,7 @@ public class Course {
 
 	private String courseID;
 	private String coursename;
-	private String instructorID;
+	private String professorId;
 	private Integer totalSeats;
 	private Integer availableSeats;
 	private boolean isOffered;
@@ -31,12 +31,12 @@ public class Course {
 		this.coursename = coursename;
 	}
 
-	public String getInstructorID() {
-		return instructorID;
+	public String getprofessorId() {
+		return professorId;
 	}
 
-	public void setInstructorID(String instructorID) {
-		this.instructorID = instructorID;
+	public void setprofessorId(String professorId) {
+		this.professorId = professorId;
 	}
 
 	public Integer getTotalSeats() {
@@ -77,12 +77,12 @@ public class Course {
 		}
 	}
 
-	public Course(String courseID, String coursename, String instructorID, Integer totalSeats, Integer availableSeats,
+	public Course(String courseID, String coursename, String professorId, Integer totalSeats, Integer availableSeats,
 			boolean isOffered) {
 		super();
 		this.courseID = courseID;
 		this.coursename = coursename;
-		this.instructorID = instructorID;
+		this.professorId = professorId;
 		this.totalSeats = totalSeats;
 		this.availableSeats = availableSeats;
 		this.isOffered = isOffered;

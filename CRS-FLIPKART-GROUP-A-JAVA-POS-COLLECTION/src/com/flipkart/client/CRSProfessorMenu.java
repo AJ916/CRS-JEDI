@@ -78,11 +78,11 @@ public class CRSProfessorMenu {
 		System.out.println("Viewing courses for selection");
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Enter Instructor ID:");
-		Integer instructorID = sc.nextInt();
+		Integer professorId = sc.nextInt();
 		sc.nextLine();  // consume the newline
 		System.out.println("Enter Course ID:");
 		String courseID = sc.nextLine();
-		professorOps.courseSelection(instructorID, courseID);
+		professorOps.courseSelection(professorId, courseID);
 	}
 
 }

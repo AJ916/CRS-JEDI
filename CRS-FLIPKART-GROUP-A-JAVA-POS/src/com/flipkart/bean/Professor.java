@@ -8,8 +8,8 @@ public class Professor extends User{
 	public Integer getProfessorId() {
 		return professorId;
 	}
-	public void setProfessorID(Integer instructorID) {
-		this.professorId = instructorID;
+	public void setProfessorID(Integer professorId) {
+		this.professorId = professorId;
 	}
 	public String getDepartment() {
 		return department;
@@ -23,9 +23,9 @@ public class Professor extends User{
 	public void setDesignation(String designation) {
 		this.designation = designation;
 	}
-	public Professor(String userName, String name, String role, String password,Integer instructorID, String department, String designation, Integer UserId) {
+	public Professor(String userName, String name, String role, String password,Integer professorId, String department, String designation, Integer UserId) {
 		super(userName,name,role,password, UserId);
-		this.professorId = instructorID;
+		this.professorId = professorId;
 		this.department = department;
 		this.designation = designation;
 	}

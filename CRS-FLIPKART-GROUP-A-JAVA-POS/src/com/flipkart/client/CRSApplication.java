@@ -104,10 +104,10 @@ public class CRSApplication {
 					CRSStudentMenu studCrs = new CRSStudentMenu();
 //					Integer studID = studentOps.getStudentIdByUsername(stud.getUserName());
 					studCrs.CreateStudentMenu(stud.getStudentID());
-					System.out.println("Welcome " + stud.getUserName() + " !!");
+//					System.out.println("Welcome " + stud.getUserName() + " !!");
 					break;}
 				else{
-					System.out.println("you are not approved");
+					System.out.println("you have not been approved");
 					break;
 				}
 
@@ -125,7 +125,7 @@ public class CRSApplication {
 
 				CRSProfessorMenu profCrs = new CRSProfessorMenu();
 				profCrs.CreateProfessorMenu(prof.getProfessorId());
-				System.out.println("Welcome " + prof.getUserName() + " !!");
+//				System.out.println("Welcome " + prof.getUserName() + " !!");
 				break;
 
 
@@ -139,7 +139,7 @@ public class CRSApplication {
 				System.out.println("Welcome " + admin.getUserName() + " !!");
 				CRSAdminMenu admCrs = new CRSAdminMenu();
 				admCrs.CreateAdminMenu(admin.getUserId());
-				System.out.println("Welcome " + admin.getUserName() + " Sir!");
+//				System.out.println("Welcome " + admin.getUserName() + " Sir!");
 				break;
 
 			default:
@@ -149,30 +149,30 @@ public class CRSApplication {
 		}
 	}
 
-	void courseByProfList() {
-		// Retrieve the list of all courses from adminOps
-		List<Course> courseCatalogue = adminOps.getCourseCatalogue();
-
-		// Check if courseCatalogue is null or empty
-		if (courseCatalogue == null || courseCatalogue.isEmpty()) {
-			System.out.println("No courses available.");
-			return;
-		}
-
-		// Print each course with its Course ID and Instructor ID
-		System.out.println("Courses and their Instructor IDs:");
-		for (Course course : courseCatalogue) {
-			String courseID = course.getCourseID();
-			String instructorID = course.getInstructorID(); // Assuming this is the ID of the instructor
-
-			// Check if instructorID is null and print appropriate message
-			String instructorMessage = (instructorID != null && !instructorID.isEmpty()) ? instructorID : "No instructor assigned";
-
-			System.out.println("Course ID: " + courseID + ", Instructor ID: " + instructorMessage);
-		}
-
-		System.out.println("End of course list.");
-	}
+//	void courseByProfList() {
+//		// Retrieve the list of all courses from adminOps
+//		List<Course> courseCatalogue = adminOps.getCourseCatalogue();
+//
+//		// Check if courseCatalogue is null or empty
+//		if (courseCatalogue == null || courseCatalogue.isEmpty()) {
+//			System.out.println("No courses available.");
+//			return;
+//		}
+//
+//		// Print each course with its Course ID and Instructor ID
+//		System.out.println("Courses and their Instructor IDs:");
+//		for (Course course : courseCatalogue) {
+//			String courseID = course.getCourseID();
+//			String professorId = course.getprofessorId(); // Assuming this is the ID of the instructor
+//
+//			// Check if professorId is null and print appropriate message
+//			String instructorMessage = (professorId != null && !professorId.isEmpty()) ? professorId : "No instructor assigned";
+//
+//			System.out.println("Course ID: " + courseID + ", Instructor ID: " + instructorMessage);
+//		}
+//
+//		System.out.println("End of course list.");
+//	}
 
 
 
@@ -189,8 +189,8 @@ public class CRSApplication {
 
 		int sId = studentOps.addStudent(username,name,"Student",password,department);
 		if(sId>0){
-			System.out.println("Student Added Successfully \n Your Student Id is : " + sId);
-			System.out.println("Welcome " + username + " !!");
+			System.out.println("Congratulations!! "+username+"\nYou have been added successfully \nYour Student Id is : " + sId);
+//			System.out.println("Welcome " + username + " !!");
 		}else{
 			System.out.println("Registration Failed");
 		}
@@ -210,10 +210,10 @@ public class CRSApplication {
 					String newPassword = sc.nextLine();
 
 					if(userOps.updatePassword(username,newPassword)){
-						System.out.println("Successfully updated password");
+						System.out.println("Password updated successfully");
 					}
 					else{
-						System.out.println("Password does not match");
+						System.out.println("Failed to update password");
 					}
 				}else {
 					System.out.println("Invalid Credentials");

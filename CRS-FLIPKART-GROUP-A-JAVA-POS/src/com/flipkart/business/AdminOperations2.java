@@ -118,9 +118,7 @@ public class AdminOperations2 {
 	}
 
 	public void viewApprovedStudents() {
-		for (Integer studentID : approvedStudents) {
-			System.out.println(studentID);
-		}
+		adminDaoOps.viewApprovedStudents();
 	}
 
 	public void showUnapprovedStudents() {

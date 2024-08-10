@@ -11,7 +11,7 @@ public class UserDaoOps {
             // Database connection details
             String url = "jdbc:mysql://localhost:3306/db1"; // Replace with your database name
             String user = "root"; // Replace with your MySQL username
-            String password = "Thanos8#yuoto"; // Replace with your MySQL password
+            String password = "Jaatraaj@700"; // Replace with your MySQL password
 
             // Establish the connection
             conn = DriverManager.getConnection(url, user, password);
@@ -76,7 +76,7 @@ public class UserDaoOps {
 
             // If at least one row was updated, the operation was successful
             if (affectedRows > 0) {
-                System.out.println("Password updated successfully.");
+               result=true;
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());

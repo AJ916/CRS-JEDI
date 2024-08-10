@@ -57,10 +57,7 @@ public class CRSProfessorMenu {
 	}
 	public void viewEnrolledStudents(Integer profId)
 	{
-		Scanner sc = new Scanner(System.in);
-		System.out.println("Enter Course ID:");
-		String courseID = sc.nextLine();
-		professorOps.viewEnrolledStudents(courseID);
+		professorOps.viewEnrolledStudents(profId);
 	}
 	public void addGrade(Integer profId) {
 		System.out.println("Adding grades");
@@ -75,14 +72,7 @@ public class CRSProfessorMenu {
 		professorOps.addGrade(studentID, courseID, alphaGrade);
 	}
 	public void courseSelection(Integer profId) {
-		System.out.println("Viewing courses for selection");
-		Scanner sc = new Scanner(System.in);
-		System.out.println("Enter Instructor ID:");
-		Integer instructorID = sc.nextInt();
-		sc.nextLine();  // consume the newline
-		System.out.println("Enter Course ID:");
-		String courseID = sc.nextLine();
-		professorOps.courseSelection(instructorID, courseID);
+		professorOps.courseSelection(profId);
 	}
 
 }

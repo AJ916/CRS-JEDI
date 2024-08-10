@@ -47,7 +47,7 @@ public class CRSAdminMenu {
                     removeCourse();
                     break;
                 case 6:
-                    viewApprovedStudents(AdminId);
+                    viewApprovedStudents();
                     break;
                 case 7:
                     sendFeePayNotification(AdminId);
@@ -55,13 +55,17 @@ public class CRSAdminMenu {
                 case 8:
                     return;
 //				System.exit(0);
+
+                case 9:
+                    return;
+                //				System.exit(0);
                 default:
                     System.out.println("***** Wrong Choice *****");
             }
         }
     }
 
-    private void viewApprovedStudents(Integer adminId) {
+    private void viewApprovedStudents() {
         adminOps.viewApprovedStudents();
     }
 
@@ -93,13 +97,13 @@ public class CRSAdminMenu {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter Professor Username: ");
         String username = sc.nextLine();
-        System.out.println("\nEnter Professor name");
+        System.out.println("Enter Professor name");
         String profName = sc.nextLine();
-        System.out.println("\nEnter Professor Password");
+        System.out.println("Enter Professor Password");
         String profPass = sc.nextLine();
-        System.out.println("\nEnter Professor Department");
+        System.out.println("Enter Professor Department");
         String profDept = sc.nextLine();
-        System.out.println("\nEnter Professor Designation");
+        System.out.println("Enter Professor Designation");
         String profDes = sc.nextLine();
         Integer userId = 0;
 
@@ -122,12 +126,7 @@ public class CRSAdminMenu {
     }
 
     private void addCourse() {
-
         adminOps.addCourse();
-
-
-
-
     }
 
 

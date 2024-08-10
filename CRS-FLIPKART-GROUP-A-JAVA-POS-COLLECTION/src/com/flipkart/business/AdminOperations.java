@@ -87,9 +87,9 @@ public class AdminOperations {
 	public void removeProfessor(int professorID) {
 //		professorOps = new ProfessorOperations();
 		professors = professorOps.getProfessors();
-//		professors.removeIf(professor -> professor.getInstructorID().equals(professorID));
+//		professors.removeIf(professor -> professor.getprofessorId().equals(professorID));
 //		System.out.println("Prof removed successfully");
-		professors.removeIf(professor -> professor.getInstructorID().equals(professorID));
+		professors.removeIf(professor -> professor.getprofessorId().equals(professorID));
 		System.out.println("Professor removed successfully");
 	}
 	Float CalculateCgpa(GradeCard gc) {

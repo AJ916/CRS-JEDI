@@ -13,7 +13,7 @@ public class AdminDaoOps {
             // Database connection details
             String url = "jdbc:mysql://localhost:3306/db1"; // Replace with your database name
             String user = "root"; // Replace with your MySQL username
-            String password = "Thanos8#yuoto"; // Replace with your MySQL password
+            String password = "Jaatraaj@700"; // Replace with your MySQL password
 
             // Establish the connection
             conn = DriverManager.getConnection(url, user, password);
@@ -113,7 +113,7 @@ public class AdminDaoOps {
     }
 
     public void addCourse(String course_id, String course_name, Boolean isOffered) {
-        String userSql = "INSERT INTO Course (course_id, course_name, instructor_id,total_seats,available_seats,is_offered) VALUES (?, ?, null,10,10,?)";
+        String userSql = "INSERT INTO Course (course_id, course_name, professor_id,total_seats,available_seats,is_offered) VALUES (?, ?, null,10,10,?)";
 
         try (Connection conn = this.connect();
              PreparedStatement userPstmt = conn.prepareStatement(userSql, PreparedStatement.RETURN_GENERATED_KEYS)) {
@@ -215,6 +215,22 @@ public class AdminDaoOps {
 
             } else {
                 System.out.println("Course ID incorrect not found ");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void viewApprovedStudents() {
+        String sql = "SELECT * FROM Student WHERE isApproved = true";
+
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
+
+            while (rs.next()) {
+                System.out.println(rs.getString("student_id")); // Use column name instead of index for clarity
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -177,10 +177,10 @@ public class CRSApplication {
 		System.out.println("Courses and their Instructor IDs:");
 		for (Course course : courseCatalogue) {
 			String courseID = course.getCourseID();
-			String instructorID = course.getInstructorID(); // Assuming this is the ID of the instructor
+			String professorId = course.getprofessorId(); // Assuming this is the ID of the instructor
 
-			// Check if instructorID is null and print appropriate message
-			String instructorMessage = (instructorID != null && !instructorID.isEmpty()) ? instructorID : "No instructor assigned";
+			// Check if professorId is null and print appropriate message
+			String instructorMessage = (professorId != null && !professorId.isEmpty()) ? professorId : "No instructor assigned";
 
 			System.out.println("Course ID: " + courseID + ", Instructor ID: " + instructorMessage);
 		}
@@ -220,10 +220,10 @@ public class CRSApplication {
 		String department = sc.nextLine();
 		System.out.println("enter designation");
 		String designation = sc.nextLine();
-		System.out.println("enter instructorID");
-		int instructorID = sc.nextInt();
+		System.out.println("enter professorId");
+		int professorId = sc.nextInt();
 
-		if(profOps.addProfessor(username,name,"professor",password,instructorID,department,designation)){
+		if(profOps.addProfessor(username,name,"professor",password,professorId,department,designation)){
 			System.out.println("Professor Added Successfully");
 		}else{
 			System.out.println("Professor already exists");
