@@ -10,9 +10,9 @@ public class studentDaoOps {
         Connection conn = null;
         try {
             // Database connection details
-            String url = "jdbc:mysql://localhost:3306/CRS_Db"; // Replace with your database name
+            String url = "jdbc:mysql://localhost:3306/db1"; // Replace with your database name
             String user = "root"; // Replace with your MySQL username
-            String password = "Kunal@1912"; // Replace with your MySQL password
+            String password = "Thanos8#yuoto"; // Replace with your MySQL password
 
             // Establish the connection
             conn = DriverManager.getConnection(url, user, password);

@@ -65,16 +65,22 @@ public class AdminOperations2 {
 		return courseCatalogue;
 	}
 
-	public void addCourse(String course_name, String courseID) {
-		Course course = new Course(courseID, course_name, null, 10, 10, true);
-		courseCatalogue.add(course);
-		System.out.println("Course added successfully");
+	public void addCourse() {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Enter Course ID: \n");
+		String courseId = sc.nextLine();
+		System.out.println("Enter Course Name: \n");
+		String course_name = sc.nextLine();
+		System.out.println("Is the course Offered: \n");
+		boolean isOffered = sc.nextBoolean();
+		adminDaoOps.addCourse(courseId,course_name,isOffered);
 	}
 
-	public void removeCourse(String courseID) {
-		courseCatalogue.removeIf(course -> course.getCourseID().equals(courseID));
-		System.out.println("Course removed successfully");
+	public void showAllProfs(){
+		adminDaoOps.showAllProfs();
 	}
+
+
 
 	public Integer addProfessor(String username, String professorName, String role, String password, String department, String designation) {
 
@@ -82,13 +88,8 @@ public class AdminOperations2 {
 
 	}
 
-	public void removeProfessor(int professorID) {
-//		professorOps = new ProfessorOperations();
-		professors = professorOps.getProfessors();
-//		professors.removeIf(professor -> professor.getInstructorID().equals(professorID));
-//		System.out.println("Prof removed successfully");
-		professors.removeIf(professor -> professor.getProfessorId().equals(professorID));
-		System.out.println("Professor removed successfully");
+	public void removeProfessor(Integer professorID) {
+		adminDaoOps.removeProf(professorID);
 	}
 
 	Float CalculateCgpa(GradeCard gc) {
@@ -129,5 +130,13 @@ public class AdminOperations2 {
 		Scanner sc = new Scanner(System.in);
 		int studentId = sc.nextInt();
 		adminDaoOps.approveOneStudent(studentId);
+	}
+
+	public void showAllCourses(){
+		adminDaoOps.showAllCourses();
+	}
+
+	public void removeCourse(String course_id){
+		adminDaoOps.removeCourse(course_id);
 	}
 }

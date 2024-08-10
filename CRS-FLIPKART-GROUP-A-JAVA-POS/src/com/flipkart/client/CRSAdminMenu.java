@@ -38,19 +38,19 @@ public class CRSAdminMenu {
                     addProfessor();
                     break;
                 case 3:
-                    addCourse(AdminId);
+                    addCourse();
                     break;
                 case 4:
-                    removeCourse(AdminId);
+                    removeProfessor();
                     break;
                 case 5:
-                    removeProfessor(AdminId);
+                    removeCourse();
                     break;
                 case 6:
-                    sendFeePayNotification(AdminId);
+                    viewApprovedStudents(AdminId);
                     break;
                 case 7:
-                    viewApprovedStudents(AdminId);
+                    sendFeePayNotification(AdminId);
                     break;
                 case 8:
                     return;
@@ -77,9 +77,11 @@ public class CRSAdminMenu {
 //
 //	}
 
-    private void removeProfessor(Integer adminId) {
+    private void removeProfessor() {
         // TODO Auto-generated method stub
         Scanner sc = new Scanner(System.in);
+        System.out.println("The list of Professors is:");
+        adminOps.showAllProfs();
         System.out.println("Enter Professor ID to remove: ");
         int professorId = sc.nextInt();
         adminOps.removeProfessor(professorId);
@@ -109,22 +111,22 @@ public class CRSAdminMenu {
         }
     }
 
-    private void removeCourse(Integer adminId) {
+    private void removeCourse() {
         // TODO Auto-generated method stub
         Scanner sc = new Scanner(System.in);
+        System.out.println("The list of courses is:");
+        adminOps.showAllCourses();
         System.out.println("Enter Course ID to remove: ");
         String courseId = sc.nextLine();
         adminOps.removeCourse(courseId);
     }
 
-    private void addCourse(Integer adminId) {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Enter Course ID to add: ");
-        String courseId = sc.nextLine();
-        System.out.println("Enter Course Name: ");
-        String courseName = sc.nextLine();
+    private void addCourse() {
 
-        adminOps.addCourse(courseName, courseId);
+        adminOps.addCourse();
+
+
+
 
     }
 

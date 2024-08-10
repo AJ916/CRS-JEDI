@@ -11,9 +11,9 @@ public class AdminDaoOps {
         Connection conn = null;
         try {
             // Database connection details
-            String url = "jdbc:mysql://localhost:3306/CRS_Db"; // Replace with your database name
+            String url = "jdbc:mysql://localhost:3306/db1"; // Replace with your database name
             String user = "root"; // Replace with your MySQL username
-            String password = "Kunal@1912"; // Replace with your MySQL password
+            String password = "Thanos8#yuoto"; // Replace with your MySQL password
 
             // Establish the connection
             conn = DriverManager.getConnection(url, user, password);
@@ -108,6 +108,116 @@ public class AdminDaoOps {
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+        }
+
+    }
+
+    public void addCourse(String course_id, String course_name, Boolean isOffered) {
+        String userSql = "INSERT INTO Course (course_id, course_name, instructor_id,total_seats,available_seats,is_offered) VALUES (?, ?, null,10,10,?)";
+
+        try (Connection conn = this.connect();
+             PreparedStatement userPstmt = conn.prepareStatement(userSql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+
+            // Set parameters for the User table insertion
+            userPstmt.setString(1, course_id);
+            userPstmt.setString(2, course_name);
+            userPstmt.setBoolean(3, isOffered);
+
+
+            // Execute the User insertion
+            int affectedRows = userPstmt.executeUpdate();
+
+            if (affectedRows > 0) {
+                System.out.println("Course added succesfully\n" + "Course_ID: " + course_id);
+
+            } else {
+                System.out.println("Course insertion failed.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void showAllProfs() {
+        String sql = "SELECT professor_id FROM Professor";
+
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
+
+            while (rs.next()) {
+                System.out.println(rs.getInt("professor_id")); // Use column name instead of index for clarity
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showAllCourses() {
+        String sql = "SELECT course_id FROM Course";
+
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
+
+            while (rs.next()) {
+                System.out.println(rs.getString("course_id")); // Use column name instead of index for clarity
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void removeProf(Integer instructor_id){
+        String sql = "DELETE FROM Professor WHERE professor_id = ?";
+
+        try (Connection conn = this.connect();
+             PreparedStatement userPstmt = conn.prepareStatement(sql)) {
+
+            // Set parameters for the User table insertion
+            userPstmt.setInt(1, instructor_id);
+
+
+
+            // Execute the User insertion
+            int affectedRows = userPstmt.executeUpdate();
+
+            if (affectedRows > 0) {
+                System.out.println("Professor with ID:"+instructor_id+" Removed Successfully");
+
+            } else {
+                System.out.println("Prof not found ");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void removeCourse(String course_id){
+        String sql = "DELETE FROM Course WHERE course_id = ?";
+
+        try (Connection conn = this.connect();
+             PreparedStatement userPstmt = conn.prepareStatement(sql)) {
+
+            // Set parameters for the User table insertion
+            userPstmt.setString(1, course_id);
+
+
+
+            // Execute the User insertion
+            int affectedRows = userPstmt.executeUpdate();
+
+            if (affectedRows > 0) {
+                System.out.println("Course with ID:"+course_id+" Removed Successfully");
+
+            } else {
+                System.out.println("Course ID incorrect not found ");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
