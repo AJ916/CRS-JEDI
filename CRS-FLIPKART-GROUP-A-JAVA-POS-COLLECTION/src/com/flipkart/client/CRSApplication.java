@@ -7,7 +7,6 @@ import com.flipkart.bean.Admin;
 import com.flipkart.bean.Course;
 import com.flipkart.bean.Professor;
 import com.flipkart.bean.Student;
-import com.flipkart.business.AdminOperations;
 import com.flipkart.business.ProfessorOperations;
 import com.flipkart.business.StudentOperations;
 

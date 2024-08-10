@@ -3,7 +3,6 @@ package com.flipkart.client;
 import com.flipkart.bean.Admin;
 import com.flipkart.bean.Course;
 import com.flipkart.bean.Professor;
-import com.flipkart.business.AdminOperations;
 
 import java.util.Scanner;
 

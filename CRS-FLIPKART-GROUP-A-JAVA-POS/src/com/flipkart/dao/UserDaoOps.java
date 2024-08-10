@@ -76,7 +76,7 @@ public class UserDaoOps {
 
             // If at least one row was updated, the operation was successful
             if (affectedRows > 0) {
-                result = true;
+                System.out.println("Password updated successfully.");
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());

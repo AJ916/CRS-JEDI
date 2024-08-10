@@ -45,10 +45,6 @@ public class CRSApplication {
 			System.out.println("Press 2: Register Student");
 			System.out.println("Press 3: Update Password");
 			System.out.println("Press 4: Exit");
-			System.out.println("Press 5: Show all students");
-			System.out.println("Press 6: Add Professor");
-			System.out.println("Press 7: Show all professors");
-			System.out.println("Press 8: Add Student");
 			System.out.println("*********************************************************");
 			int menuOption = sc.nextInt();
 			sc.nextLine();
@@ -56,28 +52,13 @@ public class CRSApplication {
 				case 1:
 					login();
 					break;
-
 				case 2:
 					registerNewStudent();
 					break;
-
 				case 3:
 					updatePassword();
 					break;
-
 				case 4:
-
-					break;
-				case 5:
-					showAllStudents();
-					break;
-				case 6:
-					addProfessor();
-					break;
-				case 7:
-					showAllProfessors();
-					break;
-				case 8:
 					sc.close();
 					System.out.println("Exited Successfully!");
 					return;
@@ -86,13 +67,6 @@ public class CRSApplication {
 					break;
 			}
 		}
-	}
-
-	private void showAllStudents(){
-		studentOps.viewStudents();
-	}
-	private void showAllProfessors(){
-		profOps.viewProfessors();
 	}
 
 	private void login() {
@@ -111,14 +85,7 @@ public class CRSApplication {
 			user.setPassword(password);
 		}
 
-
-//		 Call the getRolebyLogin method
 		userOps.getRolebyLogin(user);
-
-//		if (user.getRole() == null) {
-//			System.out.println("Invalid credentials or user not found.");
-//			return;
-//		}
 
 		switch (user.getRole()) {
 			case "Student":
@@ -157,7 +124,6 @@ public class CRSApplication {
 				System.out.println("Welcome " + prof.getUserName() + " !!");
 
 				CRSProfessorMenu profCrs = new CRSProfessorMenu();
-//					Integer profID = professorOps.getProfessorIdByUsername(prof.getUserName());
 				profCrs.CreateProfessorMenu(prof.getProfessorId());
 				System.out.println("Welcome " + prof.getUserName() + " !!");
 				break;
@@ -229,27 +195,7 @@ public class CRSApplication {
 			System.out.println("Registration Failed");
 		}
 	}
-	void addProfessor() {
-		System.out.println("enter Username");
-		String username = sc.nextLine();
-		System.out.println("enter Password");
-		String password = sc.nextLine();
-		System.out.println("enter name");
-		String name = sc.nextLine();
-		System.out.println("enter Department");
-		String department = sc.nextLine();
-		System.out.println("enter designation");
-		String designation = sc.nextLine();
-		System.out.println("enter instructorID");
-		int instructorID = sc.nextInt();
-		System.out.println("enter instructorID");
-		int userId = sc.nextInt();
-		if(profOps.addProfessor(username,name,"professor",password,instructorID,department,designation, userId)){
-			System.out.println("Professor Added Successfully");
-		}else{
-			System.out.println("Professor already exists");
-		}
-	}
+
 	void updatePassword() {
 		System.out.println("IN update Password Menu");
 
