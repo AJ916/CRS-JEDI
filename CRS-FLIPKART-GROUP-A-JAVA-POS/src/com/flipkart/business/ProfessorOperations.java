@@ -80,27 +80,6 @@ public class ProfessorOperations {
 		professorDaoOps.viewEnrolledStudents(profId);
 	}
 
-	public void courseSelection(Integer professorId, String courseID) {
-		Professor professor = findProfessorByID(professorId);
-		if (professor != null) {
-			Course course = adminOps.findCourseById(courseID);
-			if (course != null) {
-				course.setprofessorId(professor.getUserName()); // Set professorId to professor's username
-				List<Course> x= adminOps.getCourseCatalogue();
-				for(Course course1: x){
-					Boolean ismatch = course1.getCourseID().equals(courseID);
-					if(ismatch){
-						course1.setprofessorId(Integer.toString(professorId));
-					}
-				}
-				System.out.println("Course " + courseID + " assigned to Professor " + professor.getName());
-			} else {
-				System.out.println("Course not found.");
-			}
-		} else {
-			System.out.println("Course not found.");
-		}
-	}
 	public void viewProfessors() {
 		for (Professor professor : professors) {
 			System.out.println(professor.getProfessorId() + " " + professor.getDepartment() + " " + professor.getName() + " " + professor.getUserName()+ " "+ professor.getPassword());

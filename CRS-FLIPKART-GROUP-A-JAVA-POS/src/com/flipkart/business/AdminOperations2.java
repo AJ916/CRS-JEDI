@@ -137,4 +137,8 @@ public class AdminOperations2 {
 	public void removeCourse(String course_id){
 		adminDaoOps.removeCourse(course_id);
 	}
+
+	public void setAddDropWindow(boolean open) {
+		adminDaoOps.setAddDropWindow(open);
+	}
 }

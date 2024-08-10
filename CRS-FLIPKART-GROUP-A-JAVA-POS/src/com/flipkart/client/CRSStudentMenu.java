@@ -4,6 +4,8 @@ import com.flipkart.bean.Payment;
 import com.flipkart.bean.GradeCard;
 import com.flipkart.business.StudentOperations;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class CRSStudentMenu {
@@ -24,14 +26,13 @@ public class CRSStudentMenu {
 			System.out.println("\nChoose an option from the menu: ");
 			System.out.println("---------------------------------------");
 			System.out.println("Press 1: Register Courses");
-			System.out.println("Press 2: Add Course(Add-Drop period)");
-			System.out.println("Press 3: Drop Course(Add-Drop period)");
-//			System.out.println("Press 4: Finish registration ");
+			System.out.println("Press 2: Add Course");
+			System.out.println("Press 3: Drop Course");
 			System.out.println("Press 4: View Registered Courses");
 			System.out.println("Press 5: View Report Card");
-//			System.out.println("Press 7: Check Payment Window");
-			System.out.println("Press 6: MyFinances");
-			System.out.println("Press 7: Logout");
+			System.out.println("Press 6: CheckPaymentWindow");
+			System.out.println("Press 7: DoPayment");
+			System.out.println("Press 8: Logout");
 			System.out.println("*********************************************************");
 			input =sc.nextInt();
 			switch (input) {
@@ -44,23 +45,19 @@ public class CRSStudentMenu {
 				case 3:
 					dropCourse(studentId);
 					break;
-
 				case 4:
-					finishRegistration(studentId);
-					break;
-				case 5:
 					viewRegisteredCourses(studentId);
 					break;
-				case 6:
+				case 5:
 					viewReportCard(studentId);
 					break;
-				case 7:
+				case 6:
 					checkPaymentWindow(studentId);
 					break;
-				case 8:
+				case 7:
 					doPayment(studentId);
 					break;
-				case 9:
+				case 8:
 //				System.exit(0);
 					return;
 				default:
@@ -111,32 +108,98 @@ public class CRSStudentMenu {
 		studentOperations.viewRegisteredCourses(studentId); // Assuming semesterId 0 or as needed
 	}
 
-	private void finishRegistration(int studentId) {
-		studentOperations.finishRegistration();
-	}
-
-	private void dropCourse(int studentId) {
-		Scanner sc = new Scanner(System.in);
-		System.out.println("Enter Course ID to drop: ");
-		String courseId = sc.next();
-
-		studentOperations.dropCourse(studentId, courseId);
-	}
-
 	private void addCourse(Integer studentId) {
 		// TODO Auto-generated method stub
+		if (!(studentOperations.isAddDropWindowOpen())) {
+			System.out.println("Course addition is currently disabled.");
+			return;
+		}
 		Scanner sc = new Scanner(System.in);
-		System.out.println("Enter Course ID to add: ");
-		String courseId = sc.next();
-		studentOperations.addCourse(studentId, courseId);
-
+		studentOperations.showCourseCatalog();
+		String courseId;
+		while (true) {
+			System.out.print("Enter Course ID to add: ");
+			courseId = sc.nextLine();
+			if (studentOperations.isValidCourseId(courseId)) {
+				studentOperations.addCourse(studentId, courseId);
+				break;
+			} else {
+				System.out.println("Invalid Course ID. Please enter a valid Course ID.");
+			}
+		}
 	}
+	private void dropCourse(int studentId) {
+		if (!(studentOperations.isAddDropWindowOpen())) {
+			System.out.println("Course Dropping is currently disabled.");
+			return;
+		}
+		Scanner sc = new Scanner(System.in);
+		studentOperations.viewRegisteredCourses(studentId);
+		String courseId;
+		while (true) {
+			System.out.print("Enter Course ID to drop course: ");
+			courseId = sc.nextLine();
+			if (studentOperations.isValidCourseId(courseId)) {
+				studentOperations.dropCourse(studentId, courseId);
+				break;
+			} else {
+				System.out.println("Invalid Course ID. Please enter a valid Course ID.");
+			}
+		}
+	}
+
+
 
 	private void registerCourses(int studentId) {
-		Scanner sc = new Scanner(System.in);
-		System.out.println("Enter Course ID to register: ");
-		String courseId = sc.next();
-		studentOperations.registerCourses(studentId, courseId);
+		// Check if the student is already registered in any courses
+		if (studentOperations.isStudentAlreadyRegistered(studentId)) {
+			System.out.println("You are already registered in courses.");
+			return; // Exit the method if the student is already registered
+		}
+
+		Scanner scanner = new Scanner(System.in);
+
+		// Display available courses
+		studentOperations.showCourseCatalog();
+
+		// Prompt the student to select 4 primary courses
+		List<String> primaryCourses = new ArrayList<>();
+		System.out.println("Select 4 primary courses:");
+		for (int i = 1; i <= 4; i++) {
+			String courseId;
+			while (true) {
+				System.out.print("Enter Course ID for primary course " + i + ": ");
+				courseId = scanner.nextLine();
+				if (studentOperations.isValidCourseId(courseId)) {
+					primaryCourses.add(courseId);
+					break;
+				} else {
+					System.out.println("Invalid Course ID. Please enter a valid Course ID.");
+				}
+			}
+		}
+
+		// Prompt the student to select 2 alternate courses
+		List<String> alternateCourses = new ArrayList<>();
+		System.out.println("Select 2 alternate courses:");
+		for (int i = 1; i <= 2; i++) {
+			String courseId;
+			while (true) {
+				System.out.print("Enter Course ID for alternate course " + i + ": ");
+				courseId = scanner.nextLine();
+				if (studentOperations.isValidCourseId(courseId)) {
+					alternateCourses.add(courseId);
+					break;
+				} else {
+					System.out.println("Invalid Course ID. Please enter a valid Course ID.");
+				}
+			}
+		}
+
+		// Call StudentOperations to attempt course registration
+		studentOperations.registerCourses(studentId, primaryCourses, alternateCourses);
 	}
+
+
 
 }

@@ -22,7 +22,17 @@ public class AdminDaoOps {
         }
         return conn;
     }
+    public void setAddDropWindow(boolean open) {
+        String sql = "UPDATE SystemSettings SET is_add_drop_window_open = ? WHERE id = 1";
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
+            pstmt.setBoolean(1, open);
+            pstmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     public Integer addProfessor(String username, String professorName, String role, String password, String department, String designation) {
 
         String usersql = "INSERT INTO user (username, name, role, password) VALUES (?, ?, ?, ?)";
@@ -235,5 +245,9 @@ public class AdminDaoOps {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void addDropWindow() {
+
     }
 }

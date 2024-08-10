@@ -27,7 +27,8 @@ public class CRSAdminMenu {
             System.out.println("Press 6: View approved Students");
             System.out.println("Press 7: Send Payment Notification");
             System.out.println("Press 8: Generate Report Cards");
-            System.out.println("Press 9: Logout");
+            System.out.println("Press 9: Enable/Disable Add/Drop Course");
+            System.out.println("Press 10: Logout");
             System.out.println("*********************************************************");
             input = sc.nextInt();
             switch (input) {
@@ -53,15 +54,40 @@ public class CRSAdminMenu {
                     sendFeePayNotification(AdminId);
                     break;
                 case 8:
-                    return;
-//				System.exit(0);
-
+//                    generateReportCard();
                 case 9:
+                    addDropWindow();
+                case 10:
                     return;
                 //				System.exit(0);
                 default:
                     System.out.println("***** Wrong Choice *****");
             }
+        }
+    }
+
+    private void addDropWindow() {
+        // Prompt the admin for their choice
+        System.out.println("Would you like to enable or disable the add/drop course window?");
+        System.out.println("Enter 'enable' to enable or 'disable' to disable:");
+
+        // Read the user's input
+        Scanner sc = new Scanner(System.in);
+        String choice = sc.nextLine().trim().toLowerCase();
+
+        // Process the input
+        switch (choice) {
+            case "enable":
+                adminOps.setAddDropWindow(true);
+                System.out.println("The add/drop course window has been enabled.");
+                break;
+            case "disable":
+                adminOps.setAddDropWindow(false);
+                System.out.println("The add/drop course window has been disabled.");
+                break;
+            default:
+                System.out.println("Invalid choice. Please enter 'enable' or 'disable'.");
+                break;
         }
     }
 

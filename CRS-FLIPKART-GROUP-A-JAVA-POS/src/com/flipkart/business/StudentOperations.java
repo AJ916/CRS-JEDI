@@ -11,12 +11,12 @@ import com.flipkart.dao.studentDaoOps;
 public class StudentOperations {
 	private List<Student> students;
 	private AdminOperations2 adminOps;
-	private studentDaoOps studDaoOps;
+	private studentDaoOps studentDaoOps;
 
 	public StudentOperations(){
 		students = new ArrayList<>();
 		adminOps= new AdminOperations2();
-		studDaoOps = new studentDaoOps();
+		studentDaoOps = new studentDaoOps();
 		ArrayList<String> courses = new ArrayList<>();
 	}
 
@@ -25,7 +25,7 @@ public class StudentOperations {
 	}
 
 	public int addStudent(String userName, String name, String role, String password,String department) {
-		int sId = studDaoOps.registerNewStudent(userName,password,role,name,department);
+		int sId = studentDaoOps.registerNewStudent(userName,password,role,name,department);
 		return sId;
 	}
 	public Student findStudentByUsername(String userName){
@@ -37,114 +37,47 @@ public class StudentOperations {
 		return null;
 	}
 
-	//	public void registerCourses(int studentId, String courseId) {
-//		Student student = findStudentById(studentId);
-//		List<Course> availableCourses = adminOps.getCourseCatalogue();
-//		if (student != null) {
-//			for (Course course : availableCourses) {
-//				if (course.getCourseID().equals(courseId) && course.isOffered() && course.getAvailableSeats() > 0) {
-//					student.getRegisteredCourses().add(courseId);
-//					course.setAvailableSeats(course.getAvailableSeats() - 1);
-//					System.out.println("Course registered successfully.");
-//					return;
-//				}
-//			}
-//			System.out.println("Course not found.");
-//		} else {
-//			System.out.println("Student not found.");
-//		}
-//
-//	}
-	public void registerCourses(int studentId, String courseId) {
-		Student student = findStudentById(studentId);
-		Course course = findCourseById(courseId);
-		if (student != null && course != null) {
-			if (course.isOffered() && course.getAvailableSeats() > 0) {
-				student.getRegisteredCourses().add(courseId);
-				course.addStudent(studentId); // Add student to course
-				System.out.println("Course registered successfully.");
-			} else {
-				System.out.println("Course not available.");
+	public void registerCourses(int studentId, List<String> primaryCourses, List<String> alternateCourses) {
+		int registeredCount = 0;
+		// Try registering for primary courses
+		for (String courseId : primaryCourses) {
+			boolean success = studentDaoOps.registerStudentForCourse(studentId, courseId);
+			if (success) {
+				registeredCount++;
 			}
-		} else {
-			System.out.println("Student or Course not found.");
+			if (registeredCount >= 4) {
+				break;
+			}
 		}
-	}
-	//	public boolean addCourse(int studentId, String courseId) {
-//		Student student = findStudentById(studentId);
-//		List<Course> availableCourses = adminOps.getCourseCatalogue();
-//		if (student != null) {
-//			for (Course course : availableCourses) {
-//				if (course.getCourseID().equals(courseId) && course.isOffered() && course.getAvailableSeats() > 0) {
-//					student.getRegisteredCourses().add(courseId);
-//					course.setAvailableSeats(course.getAvailableSeats() - 1);
-//					System.out.println("Course added successfully.");
-//					return true;
-//				}
-//			}
-//			System.out.println("Course not found.");
-//		} else {
-//			System.out.println("Student not found.");
-//		}
-//		return false;
-//	}
-	public void addCourse(int studentId, String courseId) {
-		Student student = findStudentById(studentId);
-		Course course = findCourseById(courseId);
 
-		if (student != null && course != null) {
-			if (course.isOffered() && course.getAvailableSeats() > 0) {
-				if (!student.getRegisteredCourses().contains(courseId)) {
-					student.getRegisteredCourses().add(courseId);
-					course.addStudent(studentId); // Add student to course
-					System.out.println("Course added successfully.");
-				} else {
-					System.out.println("Student is already registered for this course.");
+		// If not all primary courses were available, try alternate courses
+		if (registeredCount < 4) {
+			for (String courseId : alternateCourses) {
+				boolean success = studentDaoOps.registerStudentForCourse(studentId, courseId);
+				if (success) {
+					registeredCount++;
 				}
-			} else {
-				System.out.println("Course not available or no seats left.");
+				if (registeredCount >= 4) {
+					break;
+				}
 			}
+		}
+
+		// Output the result
+		if (registeredCount >= 4) {
+			System.out.println("Courses successfully registered.");
 		} else {
-			System.out.println("Student or Course not found.");
+			System.out.println("Unable to register in 4 courses. Registered in " + registeredCount + " courses.");
 		}
 	}
 
-	//	public boolean dropCourse(int studentId, String courseId) {
-//		Student student = findStudentById(studentId);
-//
-//		if (student != null) {
-//			System.out.println(student.getUserName());
-//			for (String it: student.getRegisteredCourses()) {
-//				if (it.equals(courseId)) {
-//					student.getRegisteredCourses().remove(it);
-//					Course courseObj = findCourseById(courseId);
-//					if (courseObj != null) {
-//						courseObj.setAvailableSeats(courseObj.getAvailableSeats() + 1);
-//						System.out.println("Course dropped successfully.");
-//						return true;
-//					}
-//				}
-//			}
-//			System.out.println("Course not found in Student list.");
-//		} else {
-//			System.out.println("Student not found.");
-//		}
-//		return false;
-//	}
-	public void dropCourse(int studentId, String courseId) {
-		Student student = findStudentById(studentId);
-		Course course = findCourseById(courseId);
+	public void addCourse(int studentId, String courseId) {
+		studentDaoOps.registerStudentForCourse(studentId, courseId);
+	}
 
-		if (student != null && course != null) {
-			if (student.getRegisteredCourses().remove(courseId)) {
-				course.removeStudent(studentId); // Remove student from course
-				System.out.println("Course dropped successfully.");
-			} else {
-				System.out.println("Course not found in student's list.");
-			}
-		} else {
-			System.out.println("Student or Course not found.");
-		}
+
+	public void dropCourse(int studentId, String courseId) {
+		studentDaoOps.removeStudentFromCourse(studentId,courseId);
 	}
 
 	public boolean finishRegistration() {
@@ -177,18 +110,11 @@ public class StudentOperations {
 	public void DoPayment(Payment payment) {
 		System.out.println("Payment processed successfully.");
 	}
+
 	public void viewRegisteredCourses(int studentID) {
-		Student student = findStudentById(studentID);
-		if (student != null) {
-			System.out.println("Registered Courses for student " + studentID + ":");
-			for (String course : student.getRegisteredCourses()) {
-				System.out.println(course);
-				//add course name too (pair bnana pdega in student class)
-			}
-		} else {
-			System.out.println("Student not found.");
-		}
+		studentDaoOps.viewRegisteredCourses(studentID);
 	}
+
 	public Student findStudentById(int studentId) {
 		for (Student student : students) {
 			if (student.getStudentID() == studentId) {
@@ -219,5 +145,23 @@ public class StudentOperations {
 		for (Student student : students) {
 			System.out.println(student.getStudentID()+" "+student.getDepartment()+" "+student.getName()+" "+student.getUserName()+" "+ student.getPassword());
 		}
+	}
+
+	public void showCourseCatalog() {
+		studentDaoOps.displayCourseCatalog();
+	}
+
+	public boolean isValidCourseId(String courseId) {
+		boolean flag= studentDaoOps.isValidCourseId(courseId);
+		return flag;
+	}
+
+	public boolean isStudentAlreadyRegistered(int studentId) {
+		boolean flag = studentDaoOps.isStudentAlreadyRegistered(studentId);
+		return flag;
+	}
+
+	public boolean isAddDropWindowOpen() {
+		return studentDaoOps.isAddDropWindowOpen();
 	}
 }
