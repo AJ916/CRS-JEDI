@@ -5,10 +5,10 @@ public class Professor extends User{
 	private Integer instructorID;
 	private String department;
 	private String designation;
-	public Integer getInstructorID() {
+	public Integer getProfessorId() {
 		return instructorID;
 	}
-	public void setInstructorID(Integer instructorID) {
+	public void setProfessorID(Integer instructorID) {
 		this.instructorID = instructorID;
 	}
 	public String getDepartment() {
@@ -23,8 +23,8 @@ public class Professor extends User{
 	public void setDesignation(String designation) {
 		this.designation = designation;
 	}
-	public Professor(String userName, String name, String role, String password,Integer instructorID, String department, String designation) {
-		super(userName,name,role,password);
+	public Professor(String userName, String name, String role, String password,Integer instructorID, String department, String designation, Integer UserId) {
+		super(userName,name,role,password, UserId);
 		this.instructorID = instructorID;
 		this.department = department;
 		this.designation = designation;

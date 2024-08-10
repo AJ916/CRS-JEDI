@@ -1,25 +1,26 @@
 package com.flipkart.business;
 
 import com.flipkart.bean.Admin;
-import com.flipkart.bean.Professor;
 import com.flipkart.bean.Student;
+import com.flipkart.bean.User;
 import com.flipkart.dao.UserDaoOps;
+
 
 public class UserOperations {
 
-	private AdminOperations adminOps;
+	private AdminOperations2 adminOps;
 	private ProfessorOperations professorOps;
 	private StudentOperations studentOps;
 	private UserDaoOps userDaoOps;
 
 	public UserOperations() {
-		adminOps = new AdminOperations();
+		adminOps = new AdminOperations2();
 		professorOps = new ProfessorOperations();
 		studentOps = new StudentOperations();
 		userDaoOps = new UserDaoOps();
 	}
-	public String getRolebyLogin(String username) {
-		return userDaoOps.getRolebyLogin(username);
+	public void getRolebyLogin(User user) {
+		userDaoOps.getRolebyLogin(user);
 	}
 	public boolean isApproved(String username){
 		return userDaoOps.isApproved(username);
@@ -34,39 +35,19 @@ public class UserOperations {
                 Student student = studentOps.findStudentByUsername(userID);
                 yield student != null && student.getPassword().equals(password);
             }
-            case "professor" -> {
-                Professor professor = professorOps.findProfessorByUsername(userID);
-                yield professor != null && professor.getPassword().equals(password);
-            }
+//            case "professor" -> {
+//                Professor professor = professorOps.getProfessorIdByUsername(userID);
+//                yield professor != null && professor.getPassword().equals(password);
+//            }
             default -> false;
         };
 	}
+	
+	public Boolean updatePassword(String username, String newPassword){
+		return userDaoOps.updatePassword(username, newPassword);
+	}
+	public Boolean checkCredentials(String username, String password ){
 
-	void updateStudentPassword(String userID, String newPassword) {
-		Student student = studentOps.findStudentByUsername(userID);
-		if (student != null) {
-			student.setPassword(newPassword);
-			System.out.println("Student password updated successfully.");
-		} else {
-			System.out.println("Student not found.");
-		}
-	}
-	void updateAdminPassword(String userID, String newPassword) {
-		Admin admin = adminOps.findAdminByUsername(userID);
-		if (admin != null) {
-			admin.setPassword(newPassword);
-			System.out.println("Admin password updated successfully.");
-		} else {
-			System.out.println("Admin not found.");
-		}
-	}
-	void updateProfPassword(String userID, String newPassword) {
-		Professor professor = professorOps.findProfessorByUsername(userID);
-		if (professor != null) {
-			professor.setPassword(newPassword);
-			System.out.println("Professor password updated successfully.");
-		} else {
-			System.out.println("Professor not found.");
-		}
+		return userDaoOps.checkCredentials(username, password);
 	}
 }

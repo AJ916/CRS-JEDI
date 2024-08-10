@@ -1,39 +1,32 @@
 package com.flipkart.business;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.flipkart.bean.Course;
-import com.flipkart.bean.GradeCard;
 import com.flipkart.bean.Payment;
 import com.flipkart.bean.Student;
+import com.flipkart.dao.studentDaoOps;
 
 public class StudentOperations {
 	private List<Student> students;
-	private AdminOperations adminOps;
+	private AdminOperations2 adminOps;
+	private studentDaoOps studDaoOps;
 
 	public StudentOperations(){
 		students = new ArrayList<>();
-		adminOps= new AdminOperations();
+		adminOps= new AdminOperations2();
+		studDaoOps = new studentDaoOps();
 		ArrayList<String> courses = new ArrayList<>();
-		courses.add("C101");
-		courses.add("C102");
-		students.add(new Student("nikhil1", "nikhil", "student", "pass", 102, "CS", courses));
-		students.add(new Student("ajey1","ajey","student","pass",101,"CS",null));
-		students.add(new Student("kunal1","kunal","student","pass",103,"CS",null));
 	}
 
 	public List<Student> getStudents() {
 		return students;
 	}
 
-	public boolean addStudent(String userName, String name, String role, String password,Integer studentID, String department) {
-		if(findStudentByUsername(userName)==null){
-			students.add(new Student(userName,name,role,password,studentID,department,null));
-			return true;
-		}
-		return false;
+	public int addStudent(String userName, String name, String role, String password,String department) {
+		int sId = studDaoOps.registerNewStudent(userName,password,role,name,department);
+		return sId;
 	}
 	public Student findStudentByUsername(String userName){
 		for (Student student : students) {

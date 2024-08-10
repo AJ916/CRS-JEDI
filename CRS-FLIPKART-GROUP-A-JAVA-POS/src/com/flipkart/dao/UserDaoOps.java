@@ -1,18 +1,17 @@
 package com.flipkart.dao;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import com.flipkart.bean.User;
+
+import java.sql.*;
 
 public class UserDaoOps {
     private Connection connect() {
         Connection conn = null;
         try {
             // Database connection details
-            String url = "jdbc:mysql://localhost:3306/db1"; // Replace with your database name
+            String url = "jdbc:mysql://localhost:3306/CRS_Db"; // Replace with your database name
             String user = "root"; // Replace with your MySQL username
-            String password = "Jaatraaj@700"; // Replace with your MySQL password
+            String password = "Kunal@1912"; // Replace with your MySQL password
 
             // Establish the connection
             conn = DriverManager.getConnection(url, user, password);
@@ -22,27 +21,69 @@ public class UserDaoOps {
         return conn;
     }
 
-    public String getRolebyLogin(String username) {
-        String role = null;
-        String sql = "SELECT role FROM User WHERE username = ?";
+    public void getRolebyLogin(User user) {
+        String sql = "SELECT role,user_id FROM User WHERE username = ?";
 
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, username);
+            pstmt.setString(1, user.getUserName());
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                role = rs.getString("role");
+                user.setRole(rs.getString("role"));
+                user.setUserId(rs.getInt("user_id"));
             } else {
                 System.out.println("User not found.");
             }
         } catch (Exception e) {
             e.printStackTrace();
+
+        }
+    }
+    public Boolean checkCredentials(String username, String password) {
+        Boolean result = false;
+        String sql = "SELECT * FROM User WHERE username = ? AND password = ?";
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, username);
+            pstmt.setString(2, password);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                String username1 = rs.getString("username");
+                String password1 = rs.getString("password");
+                if (username.equals(username1) && password.equals(password1)) {
+                    result = true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        return role;
+        return result;
     }
+    public Boolean updatePassword(String username, String newPassword) {
+        Boolean result = false;
+        String sql = "UPDATE User SET password = ? WHERE username = ?";
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, newPassword);
+            pstmt.setString(2, username);
+            int affectedRows = pstmt.executeUpdate();
+
+            // If at least one row was updated, the operation was successful
+            if (affectedRows > 0) {
+                result = true;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return result;
+    }
+
     public boolean isApproved(String username) {
         boolean isapp = false;
        // String role = null;

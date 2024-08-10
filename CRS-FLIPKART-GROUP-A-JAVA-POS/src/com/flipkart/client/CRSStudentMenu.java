@@ -23,15 +23,15 @@ public class CRSStudentMenu {
 			System.out.println("\n************* Welcome Student *************\n");
 			System.out.println("\nChoose an option from the menu: ");
 			System.out.println("---------------------------------------");
-			System.out.println("Press 1: Course Registeration");
-			System.out.println("Press 2: Add Course to cart");
-			System.out.println("Press 3: Drop Course");
-			System.out.println("Press 4: Finish registration ");
-			System.out.println("Press 5: View Registered Courses");
-			System.out.println("Press 6: View Report Card");
-			System.out.println("Press 7: Check Payment Window");
-			System.out.println("Press 8: Do Payment");
-			System.out.println("Press 9: Logout");
+			System.out.println("Press 1: Register Courses");
+			System.out.println("Press 2: Add Course(Add-Drop period)");
+			System.out.println("Press 3: Drop Course(Add-Drop period)");
+//			System.out.println("Press 4: Finish registration ");
+			System.out.println("Press 4: View Registered Courses");
+			System.out.println("Press 5: View Report Card");
+//			System.out.println("Press 7: Check Payment Window");
+			System.out.println("Press 6: MyFinances");
+			System.out.println("Press 7: Logout");
 			System.out.println("*********************************************************");
 			input =sc.nextInt();
 			switch (input) {

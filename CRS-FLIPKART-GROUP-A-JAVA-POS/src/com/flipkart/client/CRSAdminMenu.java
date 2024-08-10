@@ -1,18 +1,16 @@
 package com.flipkart.client;
 
-import com.flipkart.bean.Admin;
-import com.flipkart.bean.Course;
 import com.flipkart.bean.Professor;
-import com.flipkart.business.AdminOperations;
+import com.flipkart.business.AdminOperations2;
 
 import java.util.Scanner;
 
 public class CRSAdminMenu {
 
-	AdminOperations adminOps;
+	AdminOperations2 adminOps;
 
-	public void CreateAdminMenu(String AdminId) {
-		adminOps = new AdminOperations();
+	public void CreateAdminMenu(Integer AdminId) {
+		adminOps = new AdminOperations2();
 		// TODO Auto-generated method stub
 		System.out.println("in admin menu!");
 		Scanner sc = new Scanner(System.in);
@@ -63,11 +61,11 @@ public class CRSAdminMenu {
 		}
 	}
 
-	private void viewApprovedStudents(String adminId) {
+	private void viewApprovedStudents(Integer adminId) {
 		adminOps.viewApprovedStudents();
 	}
 
-	private void sendFeePayNotification(String adminId) {
+	private void sendFeePayNotification(Integer adminId) {
 		// TODO Auto-generated method stub
 		adminOps.sendFeePayNotification();
 		System.out.println("Fee payment notifications sent.");
@@ -79,7 +77,7 @@ public class CRSAdminMenu {
 //
 //	}
 
-	private void removeProfessor(String adminId) {
+	private void removeProfessor(Integer adminId) {
 		// TODO Auto-generated method stub
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Enter Professor ID to remove: ");
@@ -87,7 +85,7 @@ public class CRSAdminMenu {
 		adminOps.removeProfessor(professorId);
 	}
 
-	private void addProfessor(String adminId) {
+	private void addProfessor(Integer adminId) {
 		// TODO Auto-generated method stub
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Enter Professor Username: ");
@@ -102,12 +100,14 @@ public class CRSAdminMenu {
 		String profDes = sc.nextLine();
 		System.out.println("\nEnter Professor ID");
 		Integer profId = Integer.parseInt(sc.nextLine());
+		System.out.println("\nEnter Professor ID");
+		Integer UserId = Integer.parseInt(sc.nextLine());
 
-		adminOps.addProfessor(new Professor(username,profName,"professor",profPass,profId,profDept,profDes));
+		adminOps.addProfessor(new Professor(username,profName,"professor",profPass,profId,profDept,profDes, UserId));
 
 	}
 
-	private void removeCourse(String adminId) {
+	private void removeCourse(Integer adminId) {
 		// TODO Auto-generated method stub
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Enter Course ID to remove: ");
@@ -115,7 +115,7 @@ public class CRSAdminMenu {
 		adminOps.removeCourse(courseId);
 	}
 
-	private void addCourse(String adminId) {
+	private void addCourse(Integer adminId) {
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Enter Course ID to add: ");
 		String courseId = sc.nextLine();
@@ -128,7 +128,7 @@ public class CRSAdminMenu {
 	}
 
 
-	private void approveStudentRegistration(String adminId) {
+	private void approveStudentRegistration(Integer adminId) {
 		// TODO Auto-generated method stub
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Enter Student ID to approve: ");

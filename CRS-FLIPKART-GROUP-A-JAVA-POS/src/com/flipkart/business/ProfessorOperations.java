@@ -8,20 +8,16 @@ import com.flipkart.bean.Student;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class ProfessorOperations {
 	//	private List<Professor> professors;
 	private static List<Professor> professors = new ArrayList<>();
-	private AdminOperations adminOps;
+	private AdminOperations2 adminOps;
 	private StudentOperations studentOps;
 	private List<Grade> grades;
 	public ProfessorOperations() {
-		//professors = new ArrayList<>();
-		professors.add(new Professor("parth1", "parth", "professor", "pass", 1, "CS", "Senior"));
-		professors.add(new Professor("ansh1", "ansh", "professor", "pass", 2, "CS", "Senior"));
 		grades = new ArrayList<>();
-		adminOps = new AdminOperations();
+		adminOps = new AdminOperations2();
 		studentOps = new StudentOperations();
 	}
 	private String identifier;
@@ -35,17 +31,17 @@ public class ProfessorOperations {
 		return professors;
 	}
 
-	public boolean addProfessor(String userName, String name, String role, String password, Integer instructorID, String department, String designation) {
-		if (findProfessorByUsername(userName) == null) {
-			professors.add(new Professor(userName, name, role, password, instructorID, department, designation));
+	public boolean addProfessor(String userName, String name, String role, String password, Integer instructorID, String department, String designation, Integer UserId) {
+		if (getProfessorIdByUsername(userName) == null) {
+			professors.add(new Professor(userName, name, role, password, instructorID, department, designation, UserId));
 			return true;
 		}
 		return false;
 	}
-	public Professor findProfessorByUsername(String userName) {
+	public Integer getProfessorIdByUsername(String userName) {
 		for (Professor professor : professors) {
 			if (professor.getUserName().equals(userName)) {
-				return professor;
+				return professor.getProfessorId();
 			}
 		}
 		return null;
@@ -126,12 +122,12 @@ public class ProfessorOperations {
 	}
 	public void viewProfessors() {
 		for (Professor professor : professors) {
-			System.out.println(professor.getInstructorID() + " " + professor.getDepartment() + " " + professor.getName() + " " + professor.getUserName()+ " "+ professor.getPassword());
+			System.out.println(professor.getProfessorId() + " " + professor.getDepartment() + " " + professor.getName() + " " + professor.getUserName()+ " "+ professor.getPassword());
 		}
 	}
 	private Professor findProfessorByID(Integer instructorID) {
 		for (Professor professor : professors) {
-			if (professor.getInstructorID().equals(instructorID)) {
+			if (professor.getProfessorId().equals(instructorID)) {
 				return professor;
 			}
 		}

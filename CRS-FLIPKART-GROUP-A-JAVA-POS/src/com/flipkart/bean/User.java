@@ -7,7 +7,14 @@ public class User {
 	private String name;
 	private String role;
 	private String password;
-	
+	private int userId;
+
+	public Integer getUserId() {
+		return userId;
+	}
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
 	public String getUserName() {
 		return userName;
 	}
@@ -32,16 +39,20 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public User(String userName, String name, String role, String password) {
+	public User(String userName, String name, String role, String password, Integer userId) {
 		super();
 		this.userName = userName;
 		this.name = name;
 		this.role = role;
 		this.password = password;
+		this.userId = userId;
 	}
 	public User() {
 		// TODO Auto-generated constructor stub
 	}
-	
 
+
+    public void setAdminId(Integer userId) {
+
+    }
 }

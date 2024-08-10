@@ -7,14 +7,22 @@ public class Student extends User{
 	private Integer studentID;
 	private String department;
 	private ArrayList<String> RegisteredCourses = new ArrayList<String>();
-	public Student(String userName, String name, String role, String password,Integer studentID, String department, ArrayList<String> RegisteredCourses) {
-		super(userName,name,role,password);
+	public Student(String userName, String name, String role, String password,Integer studentID, String department, ArrayList<String> RegisteredCourses,Integer userId) {
+		super(userName,name,role,password,userId);
 		this.studentID = studentID;
 		this.department = department;
 		this.RegisteredCourses = RegisteredCourses;
 	}
 	public Student() {
 		super();
+	}
+	public Student(String userName) {
+		super();
+		this.setUserName(userName);
+		// Initialize other fields with default values or leave them as null
+		this.studentID = null;
+		this.department = null;
+		this.RegisteredCourses = new ArrayList<>();
 	}
 
 	public Integer getStudentID() {
