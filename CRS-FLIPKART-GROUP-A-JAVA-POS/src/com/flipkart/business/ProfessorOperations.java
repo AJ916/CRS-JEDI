@@ -10,41 +10,9 @@ import java.util.List;
 import java.util.Objects;
 
 public class ProfessorOperations {
-	//	private List<Professor> professors;
-	private static List<Professor> professors = new ArrayList<>();
-	private AdminOperations2 adminOps;
-	private StudentOperations studentOps;
 	private ProfessorDaoOps professorDaoOps;
 	public ProfessorOperations() {
-		adminOps = new AdminOperations2();
-		studentOps = new StudentOperations();
 		professorDaoOps=new ProfessorDaoOps();
-	}
-	private String identifier;
-	// Constructor with an argument
-	public ProfessorOperations(String identifier) {
-		this.identifier = identifier;
-
-	}
-
-	public List<Professor> getProfessors() {
-		return professors;
-	}
-
-	public boolean addProfessor(String userName, String name, String role, String password, Integer professorId, String department, String designation, Integer UserId) {
-		if (getProfessorIdByUsername(userName) == null) {
-			professors.add(new Professor(userName, name, role, password, professorId, department, designation, UserId));
-			return true;
-		}
-		return false;
-	}
-	public Integer getProfessorIdByUsername(String userName) {
-		for (Professor professor : professors) {
-			if (professor.getUserName().equals(userName)) {
-				return professor.getProfessorId();
-			}
-		}
-		return null;
 	}
 
 	public void viewEnrolledStudents(Integer profId) {

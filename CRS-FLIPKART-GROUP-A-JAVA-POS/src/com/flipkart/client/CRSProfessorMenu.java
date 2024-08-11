@@ -33,20 +33,16 @@ public class CRSProfessorMenu {
 			switch(input)
 			{
 				case 1:
-					//view all the courses taught by the professor
 					courseSelection(profId);
 					break;
 				case 2:
-					//view all the enrolled students for the course
 					addGrade(profId);
 					break;
 
 				case 3:
-					//add grade for a student
 					viewEnrolledStudents(profId);
 					break;
 				case 4:
-					//logout from the system
 					return;
 //					System.exit(0);
 				default:

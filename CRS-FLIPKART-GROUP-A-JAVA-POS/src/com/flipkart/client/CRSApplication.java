@@ -124,10 +124,8 @@ public class CRSApplication {
                 System.out.println("********************************");
                 System.out.println("Logged In Successfully as a Professor");
                 System.out.println("Welcome " + prof.getUserName() + " !!");
-
                 CRSProfessorMenu profCrs = new CRSProfessorMenu();
                 profCrs.CreateProfessorMenu(prof.getProfessorId());
-//				System.out.println("Welcome " + prof.getUserName() + " !!");
                 break;
 
 
@@ -141,7 +139,6 @@ public class CRSApplication {
                 System.out.println("Welcome " + admin.getUserName() + " !!");
                 CRSAdminMenu admCrs = new CRSAdminMenu();
                 admCrs.CreateAdminMenu(admin.getUserId());
-//				System.out.println("Welcome " + admin.getUserName() + " Sir!");
                 break;
 
             default:

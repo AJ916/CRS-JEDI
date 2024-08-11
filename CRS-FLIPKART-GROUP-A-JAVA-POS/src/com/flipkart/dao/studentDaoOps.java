@@ -3,34 +3,17 @@ package com.flipkart.dao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
 import com.flipkart.bean.GradeCard;
-import com.flipkart.dao.AdminDaoOps;
+
 
 public class studentDaoOps {
-    private AdminDaoOps adminDaoOps = new AdminDaoOps();
-
-    private Connection connect() {
-        Connection conn = null;
-        try {
-            // Database connection details
-            String url = "jdbc:mysql://localhost:3306/CRS_POS_DB"; // Replace with your database name
-            String user = "root"; // Replace with your MySQL username
-            String password = "Kunal@1912"; // Replace with your MySQL password
-
-            // Establish the connection
-            conn = DriverManager.getConnection(url, user, password);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return conn;
-    }
+    private DBconnection dbconnection = new DBconnection();
 
     public int registerNewStudent(String username, String password, String role, String name, String department) {
         String userSql = "INSERT INTO User (username, password, name, role) VALUES (?, ?, ?, ?)";
         String studentSql = "INSERT INTO Student (student_id, department) VALUES (?, ?)"; // Adjust if necessary
         int sId = 0;
-        try (Connection conn = this.connect();
+        try (Connection conn = dbconnection.getConnection();
              PreparedStatement userPstmt = conn.prepareStatement(userSql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
             // Set parameters for the User table insertion
@@ -93,7 +76,7 @@ public class studentDaoOps {
                 "LEFT JOIN user u ON c.professor_id = u.user_id " +
                 "WHERE c.is_offered = true";
 
-        try (Connection conn = this.connect();
+        try (Connection conn = dbconnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
 
@@ -121,7 +104,7 @@ public class studentDaoOps {
         String registerSql = "INSERT INTO CourseEnrollment (student_id, course_id) VALUES (?, ?)";
         String updateSeatsSql = "UPDATE course SET available_seats = available_seats - 1 WHERE course_id = ?";
 
-        try (Connection conn = this.connect();
+        try (Connection conn = dbconnection.getConnection();
              PreparedStatement checkSeatsStmt = conn.prepareStatement(checkSeatsSql);
              PreparedStatement registerStmt = conn.prepareStatement(registerSql);
              PreparedStatement updateSeatsStmt = conn.prepareStatement(updateSeatsSql)) {
@@ -165,7 +148,7 @@ public class studentDaoOps {
         String removeEnrollmentSql = "DELETE FROM CourseEnrollment WHERE student_id = ? AND course_id = ?";
         String updateSeatsSql = "UPDATE course SET available_seats = available_seats + 1 WHERE course_id = ?";
 
-        try (Connection conn = this.connect();
+        try (Connection conn = dbconnection.getConnection();
              PreparedStatement checkEnrollmentStmt = conn.prepareStatement(checkEnrollmentSql);
              PreparedStatement removeEnrollmentStmt = conn.prepareStatement(removeEnrollmentSql);
              PreparedStatement updateSeatsStmt = conn.prepareStatement(updateSeatsSql)) {
@@ -207,7 +190,7 @@ public class studentDaoOps {
 
     public boolean isValidCourseId(String courseId) {
         String sql = "SELECT COUNT(*) FROM Course WHERE course_id = ?";
-        try (Connection conn = this.connect();
+        try (Connection conn = dbconnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             // Set the courseId parameter
             pstmt.setString(1, courseId);
@@ -227,7 +210,7 @@ public class studentDaoOps {
 
     public boolean isStudentAlreadyRegistered(int studentId) {
         String sql = "SELECT COUNT(*) FROM CourseEnrollment WHERE student_id = ?";
-        try (Connection conn = this.connect();
+        try (Connection conn = dbconnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, studentId);
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -248,7 +231,7 @@ public class studentDaoOps {
                 "JOIN Course c ON ce.course_id = c.course_id " +
                 "WHERE ce.student_id = ?";
 
-        try (Connection conn = this.connect();
+        try (Connection conn = dbconnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             // Set the student ID parameter
@@ -280,7 +263,7 @@ public class studentDaoOps {
     // Getter for checking if the add/drop window is open
     public boolean isAddDropWindowOpen() {
         String sql = "SELECT is_add_drop_window_open FROM SystemSettings WHERE id = 1";
-        try (Connection conn = this.connect();
+        try (Connection conn = dbconnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
 
@@ -295,7 +278,7 @@ public class studentDaoOps {
 
     public boolean isUsernameTaken(String username) {
         String sql = "SELECT COUNT(*) FROM User WHERE username = ?";
-        try (Connection conn = this.connect();
+        try (Connection conn = dbconnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) { // Removed the extra curly brace
 
             stmt.setString(1, username);
@@ -318,7 +301,7 @@ public class studentDaoOps {
                 "FROM Course c " +
                 "JOIN GradeCard g ON c.course_id = g.course_id " +
                 "WHERE g.student_id = ?";
-        try (Connection conn = this.connect();
+        try (Connection conn = dbconnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, studentId);

@@ -14,11 +14,6 @@ import java.util.Scanner;
 
 public class AdminOperations2 {
 	private List<Admin> admins;
-	private List<Course> courseCatalogue;
-	private List<Professor> professors;
-	private List<Integer> approvedStudents;
-	private Map<Integer, GradeCard> gradeCards;
-	private ProfessorOperations professorOps;
 	private AdminDaoOps adminDaoOps;
 
 
@@ -26,12 +21,7 @@ public class AdminOperations2 {
 
 
 		admins = new ArrayList<>();
-		approvedStudents = new ArrayList<>();
-		professorOps = new ProfessorOperations("admin");
 		adminDaoOps = new AdminDaoOps();
-
-		courseCatalogue = new ArrayList<>();
-
 	}
 
 
@@ -43,11 +33,6 @@ public class AdminOperations2 {
 		}
 		return null;
 
-	}
-
-	public List<Course> getCourseCatalogue() {
-
-		return courseCatalogue;
 	}
 
 	public void addCourse() {
@@ -74,8 +59,6 @@ public class AdminOperations2 {
 		adminDaoOps.showAllProfs();
 	}
 
-
-
 	public Integer addProfessor(String username, String professorName, String role, String password, String department, String designation) {
 
 		return adminDaoOps.addProfessor(username, professorName, role, password, department, designation);
@@ -86,20 +69,7 @@ public class AdminOperations2 {
 		adminDaoOps.removeProf(professorID);
 	}
 
-	Float CalculateCgpa(GradeCard gc) {
-		return null;
-	}
-
-	GradeCard generateGradeCard(int studentID) {
-		return null;
-
-	}
-
 	public void sendFeePayNotification() {
-	}
-
-	public void PaymentCompletionNotification() {
-
 	}
 
 	public void viewApprovedStudents() {

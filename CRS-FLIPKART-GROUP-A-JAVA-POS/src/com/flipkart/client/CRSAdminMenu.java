@@ -104,10 +104,6 @@ public class CRSAdminMenu {
 
     }
 
-//	private void viewReportCard(String adminId) {
-//
-//
-//	}
 
     private void removeProfessor() {
         // TODO Auto-generated method stub

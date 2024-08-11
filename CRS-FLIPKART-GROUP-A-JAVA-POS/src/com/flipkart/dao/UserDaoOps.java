@@ -5,26 +5,12 @@ import com.flipkart.bean.User;
 import java.sql.*;
 
 public class UserDaoOps {
-    private Connection connect() {
-        Connection conn = null;
-        try {
-            // Database connection details
-            String url = "jdbc:mysql://localhost:3306/CRS_POS_DB"; // Replace with your database name
-            String user = "root"; // Replace with your MySQL username
-            String password = "Kunal@1912"; // Replace with your MySQL password
-
-            // Establish the connection
-            conn = DriverManager.getConnection(url, user, password);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return conn;
-    }
+    private DBconnection dbconnection = new DBconnection();
 
     public void getRolebyLogin(User user) {
         String sql = "SELECT role,user_id FROM User WHERE username = ?";
 
-        try (Connection conn = this.connect();
+        try (Connection conn = dbconnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, user.getUserName());
@@ -44,7 +30,7 @@ public class UserDaoOps {
     public Boolean checkCredentials(String username, String password) {
         Boolean result = false;
         String sql = "SELECT * FROM User WHERE username = ? AND password = ?";
-        try (Connection conn = this.connect();
+        try (Connection conn = dbconnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, username);
@@ -67,7 +53,7 @@ public class UserDaoOps {
     public Boolean updatePassword(String username, String newPassword) {
         Boolean result = false;
         String sql = "UPDATE User SET password = ? WHERE username = ?";
-        try (Connection conn = this.connect();
+        try (Connection conn = dbconnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, newPassword);
@@ -93,7 +79,7 @@ public class UserDaoOps {
                 "JOIN User u ON s.student_id = u.user_id\n" +
                 "WHERE u.username = ?;\n";
 
-        try (Connection conn = this.connect();
+        try (Connection conn = dbconnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, username);

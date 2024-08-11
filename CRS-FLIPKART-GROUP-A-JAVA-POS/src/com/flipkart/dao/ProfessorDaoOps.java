@@ -3,7 +3,6 @@ package com.flipkart.dao;
 import com.flipkart.bean.Course;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
@@ -11,26 +10,12 @@ import java.util.Scanner;
 import java.util.*;
 
 public class ProfessorDaoOps {
-    private Connection connect() {
-        Connection conn = null;
-        try {
-            // Database connection details
-            String url = "jdbc:mysql://localhost:3306/CRS_POS_DB"; // Replace with your database name
-            String user = "root"; // Replace with your MySQL username
-            String password = "Kunal@1912"; // Replace with your MySQL password
-
-            // Establish the connection
-            conn = DriverManager.getConnection(url, user, password);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return conn;
-    }
+    private DBconnection dbconnection = new DBconnection();
 
     public void showAvailableCourses() {
         String sql = "SELECT * FROM course WHERE professor_id IS NULL AND is_offered = true";
 
-        try (Connection conn = this.connect();
+        try (Connection conn = dbconnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
 
@@ -68,7 +53,7 @@ public class ProfessorDaoOps {
         // Update the course table to assign the professor to the selected course
         String updateSql = "UPDATE course SET professor_id = ? WHERE course_id = ? AND professor_id IS NULL AND is_offered = true";
 
-        try (Connection conn = this.connect();
+        try (Connection conn = dbconnection.getConnection();
              PreparedStatement updatePstmt = conn.prepareStatement(updateSql)) {
 
             // Set the professor_id and course_id in the prepared statement
@@ -99,7 +84,7 @@ public class ProfessorDaoOps {
                     "WHERE ce.course_id = ?";
             ;
 
-            try (Connection conn = this.connect();
+            try (Connection conn = dbconnection.getConnection();
                  PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
                 // Set the course_id in the prepared statement
@@ -133,7 +118,7 @@ public class ProfessorDaoOps {
             // First, get the list of courses taught by the professor
             String coursesSql = "SELECT course_id FROM course WHERE professor_id = ?";
 
-            try (Connection conn = this.connect();
+            try (Connection conn = dbconnection.getConnection();
                  PreparedStatement pstmt = conn.prepareStatement(coursesSql)) {
 
                 // Set the professor_id in the prepared statement
@@ -168,7 +153,7 @@ public class ProfessorDaoOps {
 
     public boolean isCourseTaughtByProfessor(int professorId, String courseId) {
         String sql = "SELECT COUNT(*) FROM Course WHERE course_id = ? AND professor_id = ?";
-        try (Connection conn = this.connect();
+        try (Connection conn = dbconnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, courseId);
             pstmt.setInt(2, professorId);
@@ -185,7 +170,7 @@ public class ProfessorDaoOps {
     public List<Integer> getStudentsInCourse(String courseId) {
         String sql = "SELECT student_id FROM CourseEnrollment WHERE course_id = ?";
         List<Integer> studentIds = new ArrayList<>();
-        try (Connection conn = this.connect();
+        try (Connection conn = dbconnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, courseId);
             ResultSet rs = pstmt.executeQuery();
@@ -200,7 +185,7 @@ public class ProfessorDaoOps {
 
     public boolean addGrade(int studentId, String courseId, String grade) {
         String sql = "INSERT INTO GradeCard (student_id, course_id, grade) VALUES (?, ?, ?)";
-        try (Connection conn = this.connect();
+        try (Connection conn = dbconnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, studentId);
             pstmt.setString(2, courseId);
@@ -216,7 +201,7 @@ public class ProfessorDaoOps {
     public List<Course> getCoursesTaughtByProfessor(int professorId) {
         List<Course> courses = new ArrayList<>();
         String sql = "SELECT course_id, course_name FROM Course WHERE professor_id = ?";
-        try (Connection conn = this.connect();
+        try (Connection conn = dbconnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, professorId);
