@@ -66,7 +66,7 @@ public class AdminDaoOps {
     }
 
     public boolean printUnapprovedStudents() {
-        String sql = "SELECT student_id FROM Student WHERE isApproved = 0";
+        String sql = "SELECT student_id FROM Student WHERE isApproved = FALSE";
 
         try (Connection conn = dbconnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -76,38 +76,40 @@ public class AdminDaoOps {
 
             while (rs.next()) {
                 foundUnapproved = true;
-                System.out.println(rs.getInt("student_id")); // Use column name instead of index for clarity
-                return foundUnapproved;
+                System.out.println(rs.getInt("student_id"));
             }
 
             if (!foundUnapproved) {
-                System.out.println("No Unapproved Students Found");
-                return foundUnapproved;
+                System.out.println("No unapproved students found.");
             }
+
+            return foundUnapproved;
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
-        return false;
     }
 
+
     public void approveOneStudent(Integer student_id) {
-        boolean result = false;
         String sql = "UPDATE Student SET isApproved = 1 WHERE student_id = ?";
         try (Connection conn = dbconnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, student_id.toString());
+            pstmt.setInt(1, student_id);  // Use setInt for Integer values
             int affectedRows = pstmt.executeUpdate();
 
             // If at least one row was updated, the operation was successful
             if (affectedRows > 0) {
                 System.out.println("StudentID: " + student_id + " Approved Successfully");
+            } else {
+                System.out.println("StudentID: " + student_id + " Not Found or Not Updated");
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Database error: " + e.getMessage());
         }
-
     }
+
 
     public void addCourse(String course_id, String course_name, Boolean isOffered) {
         String userSql = "INSERT INTO Course (course_id, course_name, professor_id,total_seats,available_seats,is_offered) VALUES (?, ?, null,10,10,?)";
@@ -216,7 +218,7 @@ public class AdminDaoOps {
                 System.out.println("Course with ID:" + course_id + " Removed Successfully");
 
             } else {
-                System.out.println("Course ID incorrect not found ");
+                System.out.println("Course ID is incorrect.. ");
             }
         } catch (Exception e) {
             e.printStackTrace();

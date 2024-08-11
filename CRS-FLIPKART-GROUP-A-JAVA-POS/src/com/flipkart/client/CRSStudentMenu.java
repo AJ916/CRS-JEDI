@@ -204,9 +204,14 @@ public class CRSStudentMenu {
 			return;
 		}
 
+		// Define column widths
+		int courseIdWidth = 15;
+		int courseNameWidth = 50;
+		int gradeWidth = 10;
+		int totalWidth = courseIdWidth + courseNameWidth + gradeWidth + 5; // Adjust total width with borders and separators
+
 		// Print the report card header
-		int width = 60; // Width of the report card
-		String border = "+".repeat(width) + "+";
+		String border = "+".repeat(totalWidth);
 		String centerText = "REPORT CARD";
 		String studentInfo = String.format("Student ID: %d", studentId);
 
@@ -214,25 +219,26 @@ public class CRSStudentMenu {
 		System.out.println(border);
 
 		// Print the centered title
-		System.out.printf("|%" + (width / 2 + centerText.length() / 2) + "s%n", centerText);
+		int padding = (totalWidth - centerText.length()) / 2;
+		System.out.printf("|%" + padding + "s%s%" + padding + "s|%n", "", centerText, "");
 
 		// Print the student information
-		System.out.printf("|%-" + (width - 1) + "s%n", studentInfo);
+		System.out.printf("|%-" + (totalWidth - 2) + "s |%n", studentInfo);
 
 		// Print the separator
-		System.out.println("+" + "-".repeat(width - 2) + "+");
+		System.out.println("+" + "-".repeat(courseIdWidth) + "+" + "-".repeat(courseNameWidth) + "+" + "-".repeat(gradeWidth) + "+");
 
 		// Print the table header
-		System.out.printf("|%-15s| %-30s| %-10s|%n", "Course ID", "Course Name", "Grade");
-		System.out.println("|" + "-".repeat(15) + "+" + "-".repeat(30) + "+" + "-".repeat(10) + "|");
+		System.out.printf("|%-" + courseIdWidth + "s| %-" + courseNameWidth + "s| %-" + gradeWidth + "s|%n", "Course ID", "Course Name", "Grade");
+		System.out.println("|" + "-".repeat(courseIdWidth) + "+" + "-".repeat(courseNameWidth) + "+" + "-".repeat(gradeWidth) + "  |");
 
 		// Print the course details
 		for (GradeCard card : gradeCards) {
-			System.out.printf("|%-15s| %-30s| %-10s|%n", card.getCourseId(), card.getCourseName(), card.getGrade());
+			System.out.printf("|%-" + courseIdWidth + "s| %-" + courseNameWidth + "s| %-" + gradeWidth + "s|%n", card.getCourseId(), card.getCourseName(), card.getGrade());
 		}
 
 		// Print the bottom border
-		System.out.println("+" + "-".repeat(15) + "+" + "-".repeat(30) + "+" + "-".repeat(10) + "+");
+		System.out.println("+" + "-".repeat(courseIdWidth) + "+" + "-".repeat(courseNameWidth) + "+" + "-".repeat(gradeWidth) + "+");
 	}
 
 }

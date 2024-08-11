@@ -26,9 +26,8 @@ public class CRSAdminMenu {
             System.out.println("Press 5: Remove Course");
             System.out.println("Press 6: View approved Students");
             System.out.println("Press 7: Send Payment Notification");
-            System.out.println("Press 8: Generate Report Cards");
-            System.out.println("Press 9: Enable/Disable Add/Drop Course");
-            System.out.println("Press 10: Logout");
+            System.out.println("Press 8: Enable/Disable Add/Drop Course");
+            System.out.println("Press 9: Logout");
             System.out.println("*********************************************************");
             input = sc.nextInt();
             switch (input) {
@@ -54,12 +53,9 @@ public class CRSAdminMenu {
                     sendFeePayNotification(AdminId);
                     break;
                 case 8:
-//                    generateReportCard();
-                    break;
-                case 9:
                     addDropWindow();
                     break;
-                case 10:
+                case 9:
                     return;
                 //	System.exit(0);
                 default:
