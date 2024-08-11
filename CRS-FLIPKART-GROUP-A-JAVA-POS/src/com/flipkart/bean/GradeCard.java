@@ -2,57 +2,28 @@ package com.flipkart.bean;
 
 import java.util.HashMap;
 
+// In GradeCard.java
 public class GradeCard {
+	private String courseId;
+	private String courseName;
+	private String grade;
 
-	public GradeCard() {
-		// TODO Auto-generated constructor stub
-		super();
+	public GradeCard(String courseId, String courseName, String grade) {
+		this.courseId = courseId;
+		this.courseName = courseName;
+		this.grade = grade;
 	}
 
-	HashMap<String, String> grades = new HashMap<String, String>();
-	private Integer studentID;
-	private Integer semester;
-	private Float cgpa;
-
-
-	public GradeCard(HashMap<String, String> grades, Integer studentID, Integer semester, Float cgpa) {
-		super();
-		this.grades = grades;
-		this.studentID = studentID;
-		this.semester = semester;
-		this.cgpa = cgpa;
+	public String getCourseId() {
+		return courseId;
 	}
 
-	public HashMap<String, String> getGrades() {
-		return grades;
+	public String getCourseName() {
+		return courseName;
 	}
 
-	public void setGrades(HashMap<String, String> grades) {
-		this.grades = grades;
+	public String getGrade() {
+		return grade;
 	}
-
-	public Integer getStudentID() {
-		return studentID;
-	}
-
-	public void setStudentID(Integer studentID) {
-		this.studentID = studentID;
-	}
-
-	public Integer getSemester() {
-		return semester;
-	}
-
-	public void setSemester(Integer semester) {
-		this.semester = semester;
-	}
-
-	public Float getCgpa() {
-		return cgpa;
-	}
-
-	public void setCgpa(Float cgpa) {
-		this.cgpa = cgpa;
-	}
-	
 }
+

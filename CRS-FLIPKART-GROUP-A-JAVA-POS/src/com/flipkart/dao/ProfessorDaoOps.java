@@ -1,10 +1,14 @@
 package com.flipkart.dao;
 
+import com.flipkart.bean.Course;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.List;
 import java.util.Scanner;
+import java.util.*;
 
 public class ProfessorDaoOps {
     private Connection connect() {
@@ -161,5 +165,72 @@ public class ProfessorDaoOps {
 
 
     }
+
+    public boolean isCourseTaughtByProfessor(int professorId, String courseId) {
+        String sql = "SELECT COUNT(*) FROM Course WHERE course_id = ? AND professor_id = ?";
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, courseId);
+            pstmt.setInt(2, professorId);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
+
+    public List<Integer> getStudentsInCourse(String courseId) {
+        String sql = "SELECT student_id FROM CourseEnrollment WHERE course_id = ?";
+        List<Integer> studentIds = new ArrayList<>();
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, courseId);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                studentIds.add(rs.getInt("student_id"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return studentIds;
+    }
+
+    public boolean addGrade(int studentId, String courseId, String grade) {
+        String sql = "INSERT INTO GradeCard (student_id, course_id, grade) VALUES (?, ?, ?)";
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, studentId);
+            pstmt.setString(2, courseId);
+            pstmt.setString(3, grade);
+            int affectedRows = pstmt.executeUpdate();
+            return affectedRows > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public List<Course> getCoursesTaughtByProfessor(int professorId) {
+        List<Course> courses = new ArrayList<>();
+        String sql = "SELECT course_id, course_name FROM Course WHERE professor_id = ?";
+        try (Connection conn = this.connect();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, professorId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    String courseId = rs.getString("course_id");
+                    String courseName = rs.getString("course_name");
+                    courses.add(new Course(courseId, courseName)); // Assuming Course class has a constructor
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Handle exceptions appropriately
+        }
+        return courses;
+    }
+}
 

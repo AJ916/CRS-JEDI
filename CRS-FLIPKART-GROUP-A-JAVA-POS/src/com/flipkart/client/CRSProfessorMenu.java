@@ -59,18 +59,47 @@ public class CRSProfessorMenu {
 	{
 		professorOps.viewEnrolledStudents(profId);
 	}
-	public void addGrade(Integer profId) {
-		System.out.println("Adding grades");
+
+	public void addGrade(int professorId) {
+		// Fetch courses taught by the professor
+		List<Course> courses = professorOps.getCoursesTaughtByProfessor(professorId);
+
+		// Check if the professor is teaching any courses
+		if (courses.isEmpty()) {
+			System.out.println("No courses found for Professor ID: " + professorId);
+			return;
+		}
+
+		// Display courses to the professor
+		System.out.println("Courses taught by Professor ID " + professorId + ":");
+		for (int i = 0; i < courses.size(); i++) {
+			System.out.println((i + 1) + ". " + courses.get(i).getCourseID() + " " +courses.get(i).getCoursename()); // Display course ID and name
+		}
+
+		// Prompt professor to select a course ID
 		Scanner sc = new Scanner(System.in);
-		System.out.println("Enter Student ID:");
-		Integer studentID = sc.nextInt();
-		sc.nextLine();  // consume the newline
-		System.out.println("Enter Course ID:");
-		String courseID = sc.nextLine();
-		System.out.println("Enter Grade:");
-		String alphaGrade = sc.nextLine();
-		professorOps.addGrade(studentID, courseID, alphaGrade);
+		System.out.print("Enter the Course ID to add grades: ");
+		String courseId = sc.nextLine();
+
+		// Validate course ID
+		boolean validCourse = courses.stream()
+				.anyMatch(course -> course.getCourseID().equals(courseId));
+
+		if (!validCourse) {
+			System.out.println("Invalid Course ID. Please enter a valid Course ID from the list.");
+			return;
+		}
+
+		// Add grades for the selected course
+		boolean success = professorOps.addGradesForCourse(professorId, courseId);
+
+		if (success) {
+			System.out.println("Grades successfully added for all students in course " + courseId);
+		} else {
+			System.out.println("Failed to add grades. Please check the course ID and try again.");
+		}
 	}
+
 	public void courseSelection(Integer profId) {
 		professorOps.courseSelection(profId);
 	}

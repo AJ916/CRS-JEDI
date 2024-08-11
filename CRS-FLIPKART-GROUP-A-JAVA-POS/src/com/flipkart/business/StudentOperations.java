@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.flipkart.bean.Course;
+import com.flipkart.bean.GradeCard;
 import com.flipkart.bean.Payment;
 import com.flipkart.bean.Student;
 import com.flipkart.dao.studentDaoOps;
@@ -130,5 +131,9 @@ public class StudentOperations {
 
 	public boolean isUsernameTaken(String username) {
 		return studentDaoOps.isUsernameTaken(username);
+	}
+
+	public List<GradeCard> getGradeCard(int studentId) {
+		return studentDaoOps.getGradesForStudent(studentId);
 	}
 }

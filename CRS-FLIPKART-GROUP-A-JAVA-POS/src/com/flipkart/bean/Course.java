@@ -13,6 +13,11 @@ public class Course {
 	private boolean isOffered;
 	private List<Integer> enrolledStudents;
 
+	public Course(String courseId, String courseName) {
+		this.courseID = courseId;
+		this.coursename = courseName;
+	}
+
 	public String getCourseID() {
 		return courseID;
 	}
@@ -93,5 +98,6 @@ public class Course {
 		super();
 		this.enrolledStudents = new ArrayList<>(); // Initialize the list
 	}
+
 
 }

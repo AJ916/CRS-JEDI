@@ -1,7 +1,10 @@
 package com.flipkart.dao;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.flipkart.bean.GradeCard;
 import com.flipkart.dao.AdminDaoOps;
 
 public class studentDaoOps {
@@ -307,5 +310,30 @@ public class studentDaoOps {
             e.printStackTrace(); // Handle the exception based on your error handling strategy
         }
         return false; // If there's an error or no match, assume the username is available
+    }
+
+    public List<GradeCard> getGradesForStudent(int studentId) {
+        List<GradeCard> gradeCards = new ArrayList<>();
+        String sql = "SELECT c.course_id, c.course_name, g.grade " +
+                "FROM Course c " +
+                "JOIN GradeCard g ON c.course_id = g.course_id " +
+                "WHERE g.student_id = ?";
+        try (Connection conn = this.connect();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, studentId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    String courseId = rs.getString("course_id");
+                    String courseName = rs.getString("course_name");
+                    String grade = rs.getString("grade");
+                    gradeCards.add(new GradeCard(courseId, courseName, grade)); // Assuming GradeCard class
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Handle exceptions appropriately
+        }
+        return gradeCards;
     }
 }

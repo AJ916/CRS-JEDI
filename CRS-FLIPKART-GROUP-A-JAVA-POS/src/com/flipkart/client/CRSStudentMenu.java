@@ -90,21 +90,6 @@ public class CRSStudentMenu {
 		}
 	}
 
-	private void viewReportCard(int studentId) {
-		Scanner sc = new Scanner(System.in);
-		System.out.println("Enter Semester ID: ");
-		int semesterId = sc.nextInt();
-//		GradeCard gradeCard = studentOperations.viewReportCard(studentId, semesterId);
-//		if (gradeCard != null) {
-//			// Print or process the GradeCard details
-//			System.out.println("Grade Card Details:");
-//			// Assuming GradeCard has a method to display details
-//			// System.out.println(gradeCard.getDetails());
-//		} else {
-//			System.out.println("Report Card not found.");
-//		}
-	}
-
 	private void viewRegisteredCourses(int studentId) {
 		studentOperations.viewRegisteredCourses(studentId); // Assuming semesterId 0 or as needed
 	}
@@ -208,6 +193,46 @@ public class CRSStudentMenu {
 
 		// Call StudentOperations to attempt course registration
 		studentOperations.registerCourses(studentId, primaryCourses, alternateCourses);
+	}
+
+	// In StudentMenu.java
+	public void viewReportCard(int studentId) {
+		List<GradeCard> gradeCards = studentOperations.getGradeCard(studentId);
+
+		if (gradeCards.isEmpty()) {
+			System.out.println("No grades found for Student ID: " + studentId);
+			return;
+		}
+
+		// Print the report card header
+		int width = 60; // Width of the report card
+		String border = "+".repeat(width) + "+";
+		String centerText = "REPORT CARD";
+		String studentInfo = String.format("Student ID: %d", studentId);
+
+		// Print the top border
+		System.out.println(border);
+
+		// Print the centered title
+		System.out.printf("|%" + (width / 2 + centerText.length() / 2) + "s%n", centerText);
+
+		// Print the student information
+		System.out.printf("|%-" + (width - 1) + "s%n", studentInfo);
+
+		// Print the separator
+		System.out.println("+" + "-".repeat(width - 2) + "+");
+
+		// Print the table header
+		System.out.printf("|%-15s| %-30s| %-10s|%n", "Course ID", "Course Name", "Grade");
+		System.out.println("|" + "-".repeat(15) + "+" + "-".repeat(30) + "+" + "-".repeat(10) + "|");
+
+		// Print the course details
+		for (GradeCard card : gradeCards) {
+			System.out.printf("|%-15s| %-30s| %-10s|%n", card.getCourseId(), card.getCourseName(), card.getGrade());
+		}
+
+		// Print the bottom border
+		System.out.println("+" + "-".repeat(15) + "+" + "-".repeat(30) + "+" + "-".repeat(10) + "+");
 	}
 
 }
