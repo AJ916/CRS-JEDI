@@ -55,11 +55,13 @@ public class CRSAdminMenu {
                     break;
                 case 8:
 //                    generateReportCard();
+                    break;
                 case 9:
                     addDropWindow();
+                    break;
                 case 10:
                     return;
-                //				System.exit(0);
+                //	System.exit(0);
                 default:
                     System.out.println("***** Wrong Choice *****");
             }

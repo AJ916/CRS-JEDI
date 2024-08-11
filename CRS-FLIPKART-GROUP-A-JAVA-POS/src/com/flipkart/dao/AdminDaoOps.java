@@ -11,9 +11,9 @@ public class AdminDaoOps {
         Connection conn = null;
         try {
             // Database connection details
-            String url = "jdbc:mysql://localhost:3306/db1"; // Replace with your database name
+            String url = "jdbc:mysql://localhost:3306/CRS_POS_DB"; // Replace with your database name
             String user = "root"; // Replace with your MySQL username
-            String password = "Jaatraaj@700"; // Replace with your MySQL password
+            String password = "Kunal@1912"; // Replace with your MySQL password
 
             // Establish the connection
             conn = DriverManager.getConnection(url, user, password);
@@ -22,6 +22,7 @@ public class AdminDaoOps {
         }
         return conn;
     }
+
     public void setAddDropWindow(boolean open) {
         String sql = "UPDATE SystemSettings SET is_add_drop_window_open = ? WHERE id = 1";
         try (Connection conn = this.connect();
@@ -33,6 +34,7 @@ public class AdminDaoOps {
             e.printStackTrace();
         }
     }
+
     public Integer addProfessor(String username, String professorName, String role, String password, String department, String designation) {
 
         String usersql = "INSERT INTO user (username, name, role, password) VALUES (?, ?, ?, ?)";
@@ -81,7 +83,7 @@ public class AdminDaoOps {
         return pId;
     }
 
-    public void printUnapprovedStudents() {
+    public boolean printUnapprovedStudents() {
         String sql = "SELECT student_id FROM Student WHERE isApproved = 0";
 
         try (Connection conn = this.connect();
@@ -93,14 +95,17 @@ public class AdminDaoOps {
             while (rs.next()) {
                 foundUnapproved = true;
                 System.out.println(rs.getInt("student_id")); // Use column name instead of index for clarity
+                return foundUnapproved;
             }
 
             if (!foundUnapproved) {
                 System.out.println("No Unapproved Students Found");
+                return foundUnapproved;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return false;
     }
 
     public void approveOneStudent(Integer student_id) {
@@ -150,20 +155,27 @@ public class AdminDaoOps {
     }
 
     public void showAllProfs() {
-        String sql = "SELECT professor_id FROM Professor";
+        String sql = "SELECT p.professor_id, u.username, u.name, p.department " +
+                "FROM Professor p " +
+                "JOIN User u ON p.professor_id = u.user_id";
 
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
 
-
             while (rs.next()) {
-                System.out.println(rs.getInt("professor_id")); // Use column name instead of index for clarity
+                int professorId = rs.getInt("professor_id");
+                String username = rs.getString("username");
+                String name = rs.getString("name");
+                String department = rs.getString("department");
+
+                System.out.println("Professor ID: " + professorId + ", Username: " + username + ", Name: " + name + ", Department: " + department);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
     public void showAllCourses() {
         String sql = "SELECT course_id FROM Course";
@@ -181,7 +193,7 @@ public class AdminDaoOps {
         }
     }
 
-    public void removeProf(Integer instructor_id){
+    public void removeProf(Integer instructor_id) {
         String sql = "DELETE FROM Professor WHERE professor_id = ?";
 
         try (Connection conn = this.connect();
@@ -191,12 +203,11 @@ public class AdminDaoOps {
             userPstmt.setInt(1, instructor_id);
 
 
-
             // Execute the User insertion
             int affectedRows = userPstmt.executeUpdate();
 
             if (affectedRows > 0) {
-                System.out.println("Professor with ID:"+instructor_id+" Removed Successfully");
+                System.out.println("Professor with ID:" + instructor_id + " Removed Successfully");
 
             } else {
                 System.out.println("Prof not found ");
@@ -206,7 +217,7 @@ public class AdminDaoOps {
         }
     }
 
-    public void removeCourse(String course_id){
+    public void removeCourse(String course_id) {
         String sql = "DELETE FROM Course WHERE course_id = ?";
 
         try (Connection conn = this.connect();
@@ -216,12 +227,11 @@ public class AdminDaoOps {
             userPstmt.setString(1, course_id);
 
 
-
             // Execute the User insertion
             int affectedRows = userPstmt.executeUpdate();
 
             if (affectedRows > 0) {
-                System.out.println("Course with ID:"+course_id+" Removed Successfully");
+                System.out.println("Course with ID:" + course_id + " Removed Successfully");
 
             } else {
                 System.out.println("Course ID incorrect not found ");
@@ -232,22 +242,46 @@ public class AdminDaoOps {
     }
 
     public void viewApprovedStudents() {
-        String sql = "SELECT * FROM Student WHERE isApproved = true";
+        String sql = "SELECT s.student_id, u.name, s.department " +
+                "FROM Student s " +
+                "JOIN User u ON s.student_id = u.user_id " +
+                "WHERE s.isApproved = true";
 
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
 
-
             while (rs.next()) {
-                System.out.println(rs.getString("student_id")); // Use column name instead of index for clarity
+                int studentId = rs.getInt("student_id");
+                String name = rs.getString("name");
+                String department = rs.getString("department");
+
+                System.out.println("Student ID: " + studentId + ", Name: " + name + ", Department: " + department);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+
     public void addDropWindow() {
 
     }
+
+    public boolean isCourseExists(String courseId) {
+        String sql = "SELECT 1 FROM Course WHERE course_id = ?";
+        try (Connection conn = this.connect();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, courseId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next(); // If there's a result, the course exists
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 }

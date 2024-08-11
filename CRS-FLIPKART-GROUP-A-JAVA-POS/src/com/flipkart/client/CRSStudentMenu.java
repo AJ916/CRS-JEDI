@@ -7,6 +7,7 @@ import com.flipkart.business.StudentOperations;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.*;
 
 public class CRSStudentMenu {
 	private StudentOperations studentOperations;
@@ -162,6 +163,9 @@ public class CRSStudentMenu {
 		// Display available courses
 		studentOperations.showCourseCatalog();
 
+		// Set to track selected courses and avoid duplicates
+		Set<String> selectedCourses = new HashSet<>();
+
 		// Prompt the student to select 4 primary courses
 		List<String> primaryCourses = new ArrayList<>();
 		System.out.println("Select 4 primary courses:");
@@ -170,9 +174,12 @@ public class CRSStudentMenu {
 			while (true) {
 				System.out.print("Enter Course ID for primary course " + i + ": ");
 				courseId = scanner.nextLine();
-				if (studentOperations.isValidCourseId(courseId)) {
+				if (studentOperations.isValidCourseId(courseId) && !selectedCourses.contains(courseId)) {
 					primaryCourses.add(courseId);
+					selectedCourses.add(courseId); // Add to the set to track the selection
 					break;
+				} else if (selectedCourses.contains(courseId)) {
+					System.out.println("You have already selected this course. Please choose a different Course ID.");
 				} else {
 					System.out.println("Invalid Course ID. Please enter a valid Course ID.");
 				}
@@ -187,9 +194,12 @@ public class CRSStudentMenu {
 			while (true) {
 				System.out.print("Enter Course ID for alternate course " + i + ": ");
 				courseId = scanner.nextLine();
-				if (studentOperations.isValidCourseId(courseId)) {
+				if (studentOperations.isValidCourseId(courseId) && !selectedCourses.contains(courseId)) {
 					alternateCourses.add(courseId);
+					selectedCourses.add(courseId); // Add to the set to track the selection
 					break;
+				} else if (selectedCourses.contains(courseId)) {
+					System.out.println("You have already selected this course. Please choose a different Course ID.");
 				} else {
 					System.out.println("Invalid Course ID. Please enter a valid Course ID.");
 				}
@@ -199,7 +209,5 @@ public class CRSStudentMenu {
 		// Call StudentOperations to attempt course registration
 		studentOperations.registerCourses(studentId, primaryCourses, alternateCourses);
 	}
-
-
 
 }

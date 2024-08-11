@@ -80,20 +80,6 @@ public class StudentOperations {
 		studentDaoOps.removeStudentFromCourse(studentId,courseId);
 	}
 
-	public boolean finishRegistration() {
-		System.out.println("Registration complete.");
-		return true;
-	}
-	public List<Course> viewAvailableCourses(){
-		List<Course> availableCourses = adminOps.getCourseCatalogue();
-		List<Course> newAvailableCourses = new ArrayList<>();
-		for (Course course : availableCourses) {
-			if (course.isOffered() && course.getAvailableSeats() > 0) {
-				newAvailableCourses.add(course);
-			}
-		}
-		return newAvailableCourses;
-	}
 	public void viewReportCard(int studentID, int semesterId) {
 //		Student student = findStudentById(studentID);
 //		if (student != null) {
@@ -123,29 +109,6 @@ public class StudentOperations {
 		}
 		return null;
 	}
-	public Integer getStudentIdByUsername(String username) {
-		for (Student student : students) {
-			if (student.getUserName().equals(username)) {
-				return student.getStudentID();
-			}
-		}
-		// Return a special value or throw an exception if username is not found
-		return -1; // Indicating that the username was not found
-	}
-	public Course findCourseById(String courseId) {
-		List<Course> availableCourses = adminOps.getCourseCatalogue();
-		for (Course course : availableCourses) {
-			if (course.getCourseID().equals(courseId)) {
-				return course;
-			}
-		}
-		return null;
-	}
-	public void viewStudents() {
-		for (Student student : students) {
-			System.out.println(student.getStudentID()+" "+student.getDepartment()+" "+student.getName()+" "+student.getUserName()+" "+ student.getPassword());
-		}
-	}
 
 	public void showCourseCatalog() {
 		studentDaoOps.displayCourseCatalog();
@@ -163,5 +126,9 @@ public class StudentOperations {
 
 	public boolean isAddDropWindowOpen() {
 		return studentDaoOps.isAddDropWindowOpen();
+	}
+
+	public boolean isUsernameTaken(String username) {
+		return studentDaoOps.isUsernameTaken(username);
 	}
 }

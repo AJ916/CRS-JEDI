@@ -1,9 +1,7 @@
 package com.flipkart.dao;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
+
 import com.flipkart.dao.AdminDaoOps;
 
 public class studentDaoOps {
@@ -13,9 +11,9 @@ public class studentDaoOps {
         Connection conn = null;
         try {
             // Database connection details
-            String url = "jdbc:mysql://localhost:3306/db1"; // Replace with your database name
+            String url = "jdbc:mysql://localhost:3306/CRS_POS_DB"; // Replace with your database name
             String user = "root"; // Replace with your MySQL username
-            String password = "Jaatraaj@700"; // Replace with your MySQL password
+            String password = "Kunal@1912"; // Replace with your MySQL password
 
             // Establish the connection
             conn = DriverManager.getConnection(url, user, password);
@@ -72,7 +70,15 @@ public class studentDaoOps {
                 System.out.println("User insertion failed.");
                 return -1; // Or throw an exception if preferred
             }
-        } catch (Exception e) {
+        } catch (SQLIntegrityConstraintViolationException e) {
+            // Check if the exception is due to a unique constraint violation on the username
+            if (e.getMessage().contains("Duplicate entry") && e.getMessage().contains("for key 'username'")) {
+                System.out.println("Username already exists.");
+                return -1;
+            } else {
+                e.printStackTrace();
+            }
+        }catch (Exception e) {
             e.printStackTrace();
         }
     return sId;
@@ -282,5 +288,24 @@ public class studentDaoOps {
             e.printStackTrace();
         }
         return false; // Default to false if there's an issue
+    }
+
+    public boolean isUsernameTaken(String username) {
+        String sql = "SELECT COUNT(*) FROM User WHERE username = ?";
+        try (Connection conn = this.connect();
+             PreparedStatement stmt = conn.prepareStatement(sql)) { // Removed the extra curly brace
+
+            stmt.setString(1, username);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    int count = rs.getInt(1);
+                    return count > 0; // If count > 0, the username is taken
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Handle the exception based on your error handling strategy
+        }
+        return false; // If there's an error or no match, assume the username is available
     }
 }

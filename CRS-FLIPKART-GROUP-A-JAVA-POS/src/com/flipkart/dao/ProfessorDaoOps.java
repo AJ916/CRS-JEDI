@@ -11,9 +11,9 @@ public class ProfessorDaoOps {
         Connection conn = null;
         try {
             // Database connection details
-            String url = "jdbc:mysql://localhost:3306/db1"; // Replace with your database name
+            String url = "jdbc:mysql://localhost:3306/CRS_POS_DB"; // Replace with your database name
             String user = "root"; // Replace with your MySQL username
-            String password = "Jaatraaj@700"; // Replace with your MySQL password
+            String password = "Kunal@1912"; // Replace with your MySQL password
 
             // Establish the connection
             conn = DriverManager.getConnection(url, user, password);
@@ -57,8 +57,8 @@ public class ProfessorDaoOps {
         showAvailableCourses();
 
         // Prompt the professor to select a course by entering the Course ID
-        System.out.print("Enter the Course ID to select the course to teach: ");
         Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the Course ID to select the course to teach: ");
         String selectedCourseId = scanner.nextLine(); // Read as String
 
         // Update the course table to assign the professor to the selected course

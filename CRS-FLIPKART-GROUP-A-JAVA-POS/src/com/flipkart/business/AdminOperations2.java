@@ -44,21 +44,6 @@ public class AdminOperations2 {
 		return null;
 
 	}
-//	public Student findStudentById(int studentId) {
-//		// Return the student object based on studentId
-//
-//		for (Student student : students) {
-//			if (student.getStudentID() == studentId) {
-//				return student;
-//			}
-//		}
-//		return null; // Or handle the case when the student is not found
-//	}
-
-	public void approveStudentRegistration(int studentId) {
-		approvedStudents.add(studentId);
-		System.out.println("Student registration approved for student ID: " + studentId);
-	}
 
 	public List<Course> getCourseCatalogue() {
 
@@ -67,11 +52,20 @@ public class AdminOperations2 {
 
 	public void addCourse() {
 		Scanner sc = new Scanner(System.in);
-		System.out.println("Enter Course ID: \n");
-		String courseId = sc.nextLine();
-		System.out.println("Enter Course Name: \n");
+		String courseId;
+		while (true){
+			System.out.println("Enter Course ID: ");
+			courseId= sc.nextLine();
+			if(adminDaoOps.isCourseExists(courseId)){
+				System.out.println("Course already exists!");
+			}
+			else{
+				break;
+			}
+		}
+		System.out.println("Enter Course Name: ");
 		String course_name = sc.nextLine();
-		System.out.println("Is the course Offered: \n");
+		System.out.println("Is the course Offered: ");
 		boolean isOffered = sc.nextBoolean();
 		adminDaoOps.addCourse(courseId,course_name,isOffered);
 	}
@@ -101,15 +95,6 @@ public class AdminOperations2 {
 
 	}
 
-	public Course findCourseById(String courseID) {
-		for (Course course : courseCatalogue) {
-			if (course.getCourseID().equals(courseID)) {
-				return course;
-			}
-		}
-		return null;
-	}
-
 	public void sendFeePayNotification() {
 	}
 
@@ -123,11 +108,13 @@ public class AdminOperations2 {
 
 	public void showUnapprovedStudents() {
 		System.out.println("The list of unapproved students is:");
-		adminDaoOps.printUnapprovedStudents();
-		System.out.println("Enter the student id you wish to approve:");
-		Scanner sc = new Scanner(System.in);
-		int studentId = sc.nextInt();
-		adminDaoOps.approveOneStudent(studentId);
+		boolean flag = adminDaoOps.printUnapprovedStudents();
+		if(flag) {
+			System.out.println("Enter the student id you wish to approve:");
+			Scanner sc = new Scanner(System.in);
+			int studentId = sc.nextInt();
+			adminDaoOps.approveOneStudent(studentId);
+		}
 	}
 
 	public void showAllCourses(){
