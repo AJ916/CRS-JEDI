@@ -9,22 +9,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class ProfessorOperations {
+public class ProfessorOperations implements ProfessorOperationsInterface{
 	private ProfessorDaoOps professorDaoOps;
 	public ProfessorOperations() {
 		professorDaoOps=new ProfessorDaoOps();
 	}
-
+	@Override
 	public void viewEnrolledStudents(Integer profId) {
 		// Fetch the course by courseID
 		professorDaoOps.viewEnrolledStudents(profId);
 	}
 
-
+	@Override
     public void courseSelection(Integer profId) {
 		professorDaoOps.courseSelection(profId);
     }
-
+	@Override
 	public boolean addGradesForCourse(int professorId, String courseId) {
 		// Verify that the professor teaches the course
 		if (!professorDaoOps.isCourseTaughtByProfessor(professorId, courseId)) {
@@ -54,7 +54,7 @@ public class ProfessorOperations {
 		System.out.println("All grades have been successfully added for course " + courseId);
 		return true;
 	}
-
+	@Override
 	public List<Course> getCoursesTaughtByProfessor(int professorId) {
 		return professorDaoOps.getCoursesTaughtByProfessor(professorId);
 	}

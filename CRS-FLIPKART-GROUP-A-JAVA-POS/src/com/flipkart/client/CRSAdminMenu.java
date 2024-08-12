@@ -1,15 +1,15 @@
 package com.flipkart.client;
 
-import com.flipkart.business.AdminOperations2;
+import com.flipkart.business.AdminOperations;
 
 import java.util.Scanner;
 
 public class CRSAdminMenu {
 
-    AdminOperations2 adminOps;
+    AdminOperations adminOps;
 
     public void CreateAdminMenu(Integer AdminId) {
-        adminOps = new AdminOperations2();
+        adminOps = new AdminOperations();
         // TODO Auto-generated method stub
         System.out.println("in admin menu!");
         Scanner sc = new Scanner(System.in);
@@ -152,6 +152,19 @@ public class CRSAdminMenu {
 
     private void approveStudentRegistration() {
         // TODO Auto-generated method stub
-        adminOps.showUnapprovedStudents();
+
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Press 1: Approve one Student for Registration ");
+        System.out.println("Press 2: Approve all unapproved students for Registration at once ");
+        int choice = sc.nextInt();
+        switch (choice){
+            case 1:
+                adminOps.showUnapprovedStudents();
+                break;
+            case 2:
+                adminOps.approveAllUnapprovedStudents();
+                break;
+        }
+
     }
 }

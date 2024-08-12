@@ -4,13 +4,12 @@
 package com.flipkart.client;
 
 import com.flipkart.bean.*;
-import com.flipkart.business.AdminOperations2;
+import com.flipkart.business.AdminOperations;
 import com.flipkart.business.ProfessorOperations;
 import com.flipkart.business.StudentOperations;
 import com.flipkart.business.UserOperations;
 //import com.flipkart.dao.UserDaoOps;
 
-import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -19,7 +18,7 @@ import java.util.Scanner;
 public class CRSApplication {
     private StudentOperations studentOps;
     private ProfessorOperations profOps;
-    private AdminOperations2 adminOps;
+    private AdminOperations adminOps;
     private Scanner sc;
     private UserOperations userOps;
 
@@ -27,7 +26,7 @@ public class CRSApplication {
 
         studentOps = new StudentOperations();
         profOps = new ProfessorOperations();
-        adminOps = new AdminOperations2();
+        adminOps = new AdminOperations();
         userOps = new UserOperations();
         sc = new Scanner(System.in);
     }

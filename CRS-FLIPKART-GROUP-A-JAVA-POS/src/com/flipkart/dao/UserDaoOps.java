@@ -1,16 +1,17 @@
 package com.flipkart.dao;
 
 import com.flipkart.bean.User;
+import com.flipkart.utils.DBUtils;
 
 import java.sql.*;
 
-public class UserDaoOps {
-    private DBconnection dbconnection = new DBconnection();
+public class UserDaoOps implements UserDaoInterface {
 
-    public void getRolebyLogin(User user) {
-        String sql = "SELECT role,user_id FROM User WHERE username = ?";
+    @Override
+    public void getRoleByLogin(User user) {
+        String sql = "SELECT role, user_id FROM User WHERE username = ?";
 
-        try (Connection conn = dbconnection.getConnection();
+        try (Connection conn = DBUtils.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, user.getUserName());
@@ -24,13 +25,14 @@ public class UserDaoOps {
             }
         } catch (Exception e) {
             e.printStackTrace();
-
         }
     }
+
+    @Override
     public Boolean checkCredentials(String username, String password) {
         Boolean result = false;
         String sql = "SELECT * FROM User WHERE username = ? AND password = ?";
-        try (Connection conn = dbconnection.getConnection();
+        try (Connection conn = DBUtils.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, username);
@@ -38,11 +40,7 @@ public class UserDaoOps {
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                String username1 = rs.getString("username");
-                String password1 = rs.getString("password");
-                if (username.equals(username1) && password.equals(password1)) {
-                    result = true;
-                }
+                result = true;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -50,10 +48,12 @@ public class UserDaoOps {
 
         return result;
     }
+
+    @Override
     public Boolean updatePassword(String username, String newPassword) {
         Boolean result = false;
         String sql = "UPDATE User SET password = ? WHERE username = ?";
-        try (Connection conn = dbconnection.getConnection();
+        try (Connection conn = DBUtils.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, newPassword);
@@ -62,7 +62,7 @@ public class UserDaoOps {
 
             // If at least one row was updated, the operation was successful
             if (affectedRows > 0) {
-               result=true;
+                result = true;
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -70,16 +70,15 @@ public class UserDaoOps {
         return result;
     }
 
+    @Override
     public boolean isApproved(String username) {
         boolean isapp = false;
-       // String role = null;
-      //  String sql = "SELECT isApproved FROM student WHERE username = ?";
-        String  sql = "SELECT s.isApproved\n" +
+        String sql = "SELECT s.isApproved\n" +
                 "FROM Student s\n" +
                 "JOIN User u ON s.student_id = u.user_id\n" +
                 "WHERE u.username = ?;\n";
 
-        try (Connection conn = dbconnection.getConnection();
+        try (Connection conn = DBUtils.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, username);
@@ -96,6 +95,4 @@ public class UserDaoOps {
 
         return isapp;
     }
-
-
 }

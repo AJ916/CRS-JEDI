@@ -1,13 +1,15 @@
 package com.flipkart.dao;
+import com.flipkart.utils.DBUtils;
+
 import java.sql.*;
 
-public class AdminDaoOps {
+public class AdminDaoOps implements AdminDaoInterface {
 
-    private DBconnection dbconnection = new DBconnection();
-
+//    private DBUtils DBUtils = new DBUtils();
+    @Override
     public void setAddDropWindow(boolean open) {
         String sql = "UPDATE SystemSettings SET is_add_drop_window_open = ? WHERE id = 1";
-        try (Connection conn = dbconnection.getConnection();
+        try (Connection conn = DBUtils.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setBoolean(1, open);
@@ -16,13 +18,13 @@ public class AdminDaoOps {
             e.printStackTrace();
         }
     }
-
+    @Override
     public Integer addProfessor(String username, String professorName, String role, String password, String department, String designation) {
 
         String usersql = "INSERT INTO user (username, name, role, password) VALUES (?, ?, ?, ?)";
         String profsql = "INSERT INTO professor (professor_id, department, designation) VALUES (?, ?, ?)";
         int pId = 0;
-        try (Connection conn = dbconnection.getConnection();
+        try (Connection conn = DBUtils.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(usersql, Statement.RETURN_GENERATED_KEYS);) {
             pstmt.setString(1, username);
             pstmt.setString(2, professorName);
@@ -64,11 +66,11 @@ public class AdminDaoOps {
         }
         return pId;
     }
-
+    @Override
     public boolean printUnapprovedStudents() {
         String sql = "SELECT student_id FROM Student WHERE isApproved = FALSE";
 
-        try (Connection conn = dbconnection.getConnection();
+        try (Connection conn = DBUtils.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
 
@@ -90,10 +92,10 @@ public class AdminDaoOps {
         }
     }
 
-
+    @Override
     public void approveOneStudent(Integer student_id) {
         String sql = "UPDATE Student SET isApproved = 1 WHERE student_id = ?";
-        try (Connection conn = dbconnection.getConnection();
+        try (Connection conn = DBUtils.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, student_id);  // Use setInt for Integer values
@@ -109,12 +111,35 @@ public class AdminDaoOps {
             System.out.println("Database error: " + e.getMessage());
         }
     }
+    @Override
+    public void approveAllUnapprovedStudents(Boolean choice) {
+        if(choice){
+            String sql = "UPDATE Student SET isApproved = 1 WHERE isApproved = 0";
+            try (Connection conn = DBUtils.getConnection();
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
+                int affectedRows = pstmt.executeUpdate();
 
+                // If at least one row was updated, the operation was successful
+                if (affectedRows > 0) {
+                    System.out.println(affectedRows + " students approved successfully.");
+                } else {
+                    System.out.println("No unapproved students found.");
+                }
+            } catch (SQLException e) {
+                System.out.println("Database error: " + e.getMessage());
+            }
+        }
+        else{
+            System.out.println("No student approved as per your choice");
+        }
+    }
+
+    @Override
     public void addCourse(String course_id, String course_name, Boolean isOffered) {
         String userSql = "INSERT INTO Course (course_id, course_name, professor_id,total_seats,available_seats,is_offered) VALUES (?, ?, null,10,10,?)";
 
-        try (Connection conn = dbconnection.getConnection();
+        try (Connection conn = DBUtils.getConnection();
              PreparedStatement userPstmt = conn.prepareStatement(userSql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
             // Set parameters for the User table insertion
@@ -137,13 +162,13 @@ public class AdminDaoOps {
         }
 
     }
-
+    @Override
     public void showAllProfs() {
         String sql = "SELECT p.professor_id, u.username, u.name, p.department " +
                 "FROM Professor p " +
                 "JOIN User u ON p.professor_id = u.user_id";
 
-        try (Connection conn = dbconnection.getConnection();
+        try (Connection conn = DBUtils.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
 
@@ -160,11 +185,11 @@ public class AdminDaoOps {
         }
     }
 
-
+    @Override
     public void showAllCourses() {
         String sql = "SELECT course_id FROM Course";
 
-        try (Connection conn = dbconnection.getConnection();
+        try (Connection conn = DBUtils.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
 
@@ -176,11 +201,11 @@ public class AdminDaoOps {
             e.printStackTrace();
         }
     }
-
+    @Override
     public void removeProf(Integer instructor_id) {
         String sql = "DELETE FROM Professor WHERE professor_id = ?";
 
-        try (Connection conn = dbconnection.getConnection();
+        try (Connection conn = DBUtils.getConnection();
              PreparedStatement userPstmt = conn.prepareStatement(sql)) {
 
             // Set parameters for the User table insertion
@@ -200,11 +225,11 @@ public class AdminDaoOps {
             e.printStackTrace();
         }
     }
-
+    @Override
     public void removeCourse(String course_id) {
         String sql = "DELETE FROM Course WHERE course_id = ?";
 
-        try (Connection conn = dbconnection.getConnection();
+        try (Connection conn = DBUtils.getConnection();
              PreparedStatement userPstmt = conn.prepareStatement(sql)) {
 
             // Set parameters for the User table insertion
@@ -224,14 +249,14 @@ public class AdminDaoOps {
             e.printStackTrace();
         }
     }
-
+    @Override
     public void viewApprovedStudents() {
         String sql = "SELECT s.student_id, u.name, s.department " +
                 "FROM Student s " +
                 "JOIN User u ON s.student_id = u.user_id " +
                 "WHERE s.isApproved = true";
 
-        try (Connection conn = dbconnection.getConnection();
+        try (Connection conn = DBUtils.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
 
@@ -247,10 +272,10 @@ public class AdminDaoOps {
         }
     }
 
-
+    @Override
     public boolean isCourseExists(String courseId) {
         String sql = "SELECT 1 FROM Course WHERE course_id = ?";
-        try (Connection conn = dbconnection.getConnection();
+        try (Connection conn = DBUtils.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, courseId);

@@ -31,9 +31,8 @@ public class CRSStudentMenu {
 			System.out.println("Press 3: Drop Course");
 			System.out.println("Press 4: View Registered Courses");
 			System.out.println("Press 5: View Report Card");
-			System.out.println("Press 6: CheckPaymentWindow");
-			System.out.println("Press 7: DoPayment");
-			System.out.println("Press 8: Logout");
+			System.out.println("Press 6: DoPayment");
+			System.out.println("Press 7: Logout");
 			System.out.println("*********************************************************");
 			input =sc.nextInt();
 			switch (input) {
@@ -53,12 +52,9 @@ public class CRSStudentMenu {
 					viewReportCard(studentId);
 					break;
 				case 6:
-					checkPaymentWindow(studentId);
-					break;
-				case 7:
 					doPayment(studentId);
 					break;
-				case 8:
+				case 7:
 //				System.exit(0);
 					return;
 				default:
@@ -68,25 +64,59 @@ public class CRSStudentMenu {
 	}
 
 	private void doPayment(int studentId) {
-		Scanner sc = new Scanner(System.in);
-		System.out.println("Enter Payment Amount: ");
-		Integer amount = sc.nextInt();
-		System.out.println("Enter Payment ID: ");
-		Integer paymentID = sc.nextInt();
-		// Assuming payment status is true for successful payments
-		Boolean paymentStatus = true;
-
-		Payment payment = new Payment(studentId, paymentID, paymentStatus, amount);
-		studentOperations.DoPayment(payment);
-		System.out.println("Payment processed.");
+		// Check if student is registered in any courses
+		if (!studentOperations.isStudentAlreadyRegistered(studentId)) {
+			System.out.println("Student is not registered in any courses.");
+			return;
+		}
+		double amountDue = studentOperations.getAmountDue(studentId);
+		if (amountDue == 0) {
+			System.out.println("You have already paid. Thank you!");
+			return;
+		}
+//		 Billing amount
+//		amountDue = 200000.00;
+		else {
+			System.out.println("The billing amount is: " + amountDue);
+			if (!studentOperations.areCardDetailsSaved(studentId)) {
+				getCardDetails(studentId);
+			}
+			Scanner sc = new Scanner(System.in);
+			Boolean choice = false;
+			System.out.println("Please enter the amount you would like to pay: ");
+			double amount = sc.nextInt();
+			if (amount != amountDue) {
+				System.out.println("Please enter the right amount you have to pay! ");
+			}
+			System.out.println("Please enter true to do the payment.");
+			choice = sc.nextBoolean();
+			if (choice) {
+				if (studentOperations.processPayment(studentId, amountDue)) {
+					studentOperations.updatePaymentStatus(studentId, 0);
+					System.out.println("Payment successful. Amount due: 0");
+				} else {
+					System.out.println("Payment failed.");
+				}
+			}
+		}
 	}
+	private void getCardDetails(int studentId) {
+		Scanner scanner = new Scanner(System.in);
 
-	private void checkPaymentWindow(int studentId) {
-		Boolean isOpen = studentOperations.checkPaymentWindow(studentId);
-		if (isOpen) {
-			System.out.println("Payment window is open.");
+		System.out.println("Enter card number:");
+		String cardNumber = scanner.nextLine();
+
+		System.out.println("Enter card expiry date (YYYY-MM-DD):");
+		String cardExpiry = scanner.nextLine();
+
+		System.out.println("Enter card CVV:");
+		int cardCVV = scanner.nextInt();
+
+		if (studentOperations.saveCardDetails(studentId, cardNumber, cardExpiry, cardCVV)) {
+			System.out.println("Card details saved successfully.");
+			doPayment(studentId);
 		} else {
-			System.out.println("Payment window is closed.");
+			System.out.println("Failed to save card details.");
 		}
 	}
 

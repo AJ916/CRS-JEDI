@@ -4,16 +4,16 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import com.flipkart.bean.GradeCard;
+import com.flipkart.utils.DBUtils;
 
 
-public class studentDaoOps {
-    private DBconnection dbconnection = new DBconnection();
-
+public class studentDaoOps implements StudentDaoInterface{
+    @Override
     public int registerNewStudent(String username, String password, String role, String name, String department) {
         String userSql = "INSERT INTO User (username, password, name, role) VALUES (?, ?, ?, ?)";
         String studentSql = "INSERT INTO Student (student_id, department) VALUES (?, ?)"; // Adjust if necessary
         int sId = 0;
-        try (Connection conn = dbconnection.getConnection();
+        try (Connection conn = DBUtils.getConnection();
              PreparedStatement userPstmt = conn.prepareStatement(userSql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
             // Set parameters for the User table insertion
@@ -69,14 +69,14 @@ public class studentDaoOps {
         }
     return sId;
     }
-
+    @Override
     public void displayCourseCatalog() {
         String sql = "SELECT c.course_id, c.course_name, u.name AS professor_name " +
                 "FROM course c " +
                 "LEFT JOIN user u ON c.professor_id = u.user_id " +
                 "WHERE c.is_offered = true";
 
-        try (Connection conn = dbconnection.getConnection();
+        try (Connection conn = DBUtils.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
 
@@ -98,16 +98,35 @@ public class studentDaoOps {
             e.printStackTrace();
         }
     }
-
+    @Override
+    public boolean generateBill(int studentId){
+        String updatePaymentSql = "INSERT INTO Payment (student_id) VALUES (?)";
+        try (Connection conn = DBUtils.getConnection();
+             PreparedStatement updatePaymentStmt = conn.prepareStatement(updatePaymentSql)){
+             updatePaymentStmt.setInt(1, studentId);
+             int affectedRows = updatePaymentStmt.executeUpdate();
+            if(affectedRows > 0){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    @Override
     public boolean registerStudentForCourse(int studentId, String courseId) {
         String checkSeatsSql = "SELECT available_seats FROM course WHERE course_id = ? AND available_seats > 0";
         String registerSql = "INSERT INTO CourseEnrollment (student_id, course_id) VALUES (?, ?)";
         String updateSeatsSql = "UPDATE course SET available_seats = available_seats - 1 WHERE course_id = ?";
 
-        try (Connection conn = dbconnection.getConnection();
+        try (Connection conn = DBUtils.getConnection();
              PreparedStatement checkSeatsStmt = conn.prepareStatement(checkSeatsSql);
              PreparedStatement registerStmt = conn.prepareStatement(registerSql);
-             PreparedStatement updateSeatsStmt = conn.prepareStatement(updateSeatsSql)) {
+             PreparedStatement updateSeatsStmt = conn.prepareStatement(updateSeatsSql)){
 
             // Check if the course has available seats
             checkSeatsStmt.setString(1, courseId);
@@ -142,13 +161,13 @@ public class studentDaoOps {
             return false; // Registration failed due to an SQL exception
         }
     }
-
+    @Override
     public boolean removeStudentFromCourse(int studentId, String courseId) {
         String checkEnrollmentSql = "SELECT COUNT(*) FROM CourseEnrollment WHERE student_id = ? AND course_id = ?";
         String removeEnrollmentSql = "DELETE FROM CourseEnrollment WHERE student_id = ? AND course_id = ?";
         String updateSeatsSql = "UPDATE course SET available_seats = available_seats + 1 WHERE course_id = ?";
 
-        try (Connection conn = dbconnection.getConnection();
+        try (Connection conn = DBUtils.getConnection();
              PreparedStatement checkEnrollmentStmt = conn.prepareStatement(checkEnrollmentSql);
              PreparedStatement removeEnrollmentStmt = conn.prepareStatement(removeEnrollmentSql);
              PreparedStatement updateSeatsStmt = conn.prepareStatement(updateSeatsSql)) {
@@ -187,10 +206,10 @@ public class studentDaoOps {
             return false; // Removal failed due to an SQL exception
         }
     }
-
+    @Override
     public boolean isValidCourseId(String courseId) {
         String sql = "SELECT COUNT(*) FROM Course WHERE course_id = ?";
-        try (Connection conn = dbconnection.getConnection();
+        try (Connection conn = DBUtils.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             // Set the courseId parameter
             pstmt.setString(1, courseId);
@@ -207,10 +226,10 @@ public class studentDaoOps {
         return false;
     }
 
-
+    @Override
     public boolean isStudentAlreadyRegistered(int studentId) {
         String sql = "SELECT COUNT(*) FROM CourseEnrollment WHERE student_id = ?";
-        try (Connection conn = dbconnection.getConnection();
+        try (Connection conn = DBUtils.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, studentId);
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -224,14 +243,14 @@ public class studentDaoOps {
         }
         return false;
     }
-
+    @Override
     public void viewRegisteredCourses(int studentID) {
         String sql = "SELECT c.course_id, c.course_name " +
                 "FROM CourseEnrollment ce " +
                 "JOIN Course c ON ce.course_id = c.course_id " +
                 "WHERE ce.student_id = ?";
 
-        try (Connection conn = dbconnection.getConnection();
+        try (Connection conn = DBUtils.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             // Set the student ID parameter
@@ -259,11 +278,11 @@ public class studentDaoOps {
             e.printStackTrace();
         }
     }
-
+    @Override
     // Getter for checking if the add/drop window is open
     public boolean isAddDropWindowOpen() {
         String sql = "SELECT is_add_drop_window_open FROM SystemSettings WHERE id = 1";
-        try (Connection conn = dbconnection.getConnection();
+        try (Connection conn = DBUtils.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
 
@@ -275,10 +294,10 @@ public class studentDaoOps {
         }
         return false; // Default to false if there's an issue
     }
-
+    @Override
     public boolean isUsernameTaken(String username) {
         String sql = "SELECT COUNT(*) FROM User WHERE username = ?";
-        try (Connection conn = dbconnection.getConnection();
+        try (Connection conn = DBUtils.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) { // Removed the extra curly brace
 
             stmt.setString(1, username);
@@ -294,14 +313,14 @@ public class studentDaoOps {
         }
         return false; // If there's an error or no match, assume the username is available
     }
-
+    @Override
     public List<GradeCard> getGradesForStudent(int studentId) {
         List<GradeCard> gradeCards = new ArrayList<>();
         String sql = "SELECT c.course_id, c.course_name, g.grade " +
                 "FROM Course c " +
                 "JOIN GradeCard g ON c.course_id = g.course_id " +
                 "WHERE g.student_id = ?";
-        try (Connection conn = dbconnection.getConnection();
+        try (Connection conn = DBUtils.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, studentId);
@@ -318,5 +337,76 @@ public class studentDaoOps {
             e.printStackTrace(); // Handle exceptions appropriately
         }
         return gradeCards;
+    }
+    @Override
+    public void updatePaymentStatus(int studentId, double amountDue) {
+        String sql = "UPDATE Payment SET amount_due = ? WHERE student_id = ?";
+        try (Connection conn = DBUtils.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setDouble(1, amountDue);  // Set the new amount_due
+            pstmt.setInt(2, studentId);
+            int affectedRows = pstmt.executeUpdate();
+
+            if (affectedRows > 0) {
+                System.out.println("Payment status updated successfully for student ID: " + studentId);
+            } else {
+                System.out.println("No record found for student ID: " + studentId);
+            }
+        } catch (SQLException e) {
+            System.out.println("Database error: " + e.getMessage());
+        }
+    }
+    @Override
+    public boolean saveCardDetails(int studentId, String cardNumber, String cardExpiry, int cardCVV) {
+        String sql = "INSERT INTO CardDetails (student_id, card_number, card_expiry, card_cvv) VALUES (?, ?, ?, ?)";
+        try (Connection conn = DBUtils.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, studentId);
+            pstmt.setString(2, cardNumber);
+            pstmt.setDate(3, Date.valueOf(cardExpiry));
+            pstmt.setInt(4, cardCVV);
+            int affectedRows = pstmt.executeUpdate();
+
+            return affectedRows > 0;
+        } catch (SQLException e) {
+            System.out.println("Database error: " + e.getMessage());
+            return false;
+        }
+    }
+    @Override
+    public boolean areCardDetailsSaved(int studentId) {
+        String sql = "SELECT COUNT(*) FROM CardDetails WHERE student_id = ?";
+        try (Connection conn = DBUtils.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, studentId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Database error: " + e.getMessage());
+        }
+        return false;
+    }
+    @Override
+    public double getAmountDue(int studentId) {
+        String sql = "SELECT amount_due FROM Payment WHERE student_id = ?";
+        try (Connection conn = DBUtils.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, studentId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getDouble("amount_due");
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Database error: " + e.getMessage());
+        }
+        return 0;
     }
 }

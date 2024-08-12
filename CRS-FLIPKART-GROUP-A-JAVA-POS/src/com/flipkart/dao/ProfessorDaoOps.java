@@ -1,6 +1,7 @@
 package com.flipkart.dao;
 
 import com.flipkart.bean.Course;
+import com.flipkart.utils.DBUtils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,13 +10,12 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.*;
 
-public class ProfessorDaoOps {
-    private DBconnection dbconnection = new DBconnection();
-
+public class ProfessorDaoOps implements ProfessorDaoInterface{
+    @Override
     public void showAvailableCourses() {
         String sql = "SELECT * FROM course WHERE professor_id IS NULL AND is_offered = true";
 
-        try (Connection conn = dbconnection.getConnection();
+        try (Connection conn = DBUtils.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
 
@@ -42,6 +42,7 @@ public class ProfessorDaoOps {
     }
 
 
+    @Override
     public void courseSelection(Integer profId) {
         showAvailableCourses();
 
@@ -53,7 +54,7 @@ public class ProfessorDaoOps {
         // Update the course table to assign the professor to the selected course
         String updateSql = "UPDATE course SET professor_id = ? WHERE course_id = ? AND professor_id IS NULL AND is_offered = true";
 
-        try (Connection conn = dbconnection.getConnection();
+        try (Connection conn = DBUtils.getConnection();
              PreparedStatement updatePstmt = conn.prepareStatement(updateSql)) {
 
             // Set the professor_id and course_id in the prepared statement
@@ -76,84 +77,86 @@ public class ProfessorDaoOps {
     }
 
 
-        // Method to get enrolled students for a given course
-        public void viewEnrolledStudents(String courseID) {
-             String sql = "SELECT ce.student_id, u.name " +
-                    "FROM CourseEnrollment ce " +
-                    "JOIN user u ON ce.student_id = u.user_id " +
-                    "WHERE ce.course_id = ?";
-            ;
+    // Method to get enrolled students for a given course
+    @Override
+    public void viewEnrolledStudents(String courseID) {
+        String sql = "SELECT ce.student_id, u.name " +
+                "FROM CourseEnrollment ce " +
+                "JOIN user u ON ce.student_id = u.user_id " +
+                "WHERE ce.course_id = ?";
+        ;
 
-            try (Connection conn = dbconnection.getConnection();
-                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DBUtils.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-                // Set the course_id in the prepared statement
-                pstmt.setString(1, courseID);
+            // Set the course_id in the prepared statement
+            pstmt.setString(1, courseID);
 
-                try (ResultSet rs = pstmt.executeQuery()) {
+            try (ResultSet rs = pstmt.executeQuery()) {
 
-                    System.out.println("Enrolled Students for Course ID: " + courseID);
-                    System.out.println("+------------+----------------------+");
-                    System.out.printf("| %-10s | %-20s |%n", "Student ID", "Student Name");
-                    System.out.println("+------------+----------------------+");
+                System.out.println("Enrolled Students for Course ID: " + courseID);
+                System.out.println("+------------+----------------------+");
+                System.out.printf("| %-10s | %-20s |%n", "Student ID", "Student Name");
+                System.out.println("+------------+----------------------+");
 
-                    while (rs.next()) {
-                        String studentId = rs.getString("student_id");
-                        String studentName = rs.getString("name");
-                        System.out.printf("| %-10s | %-20s |%n", studentId, studentName);
-                    }
-
-                    System.out.println("+------------+----------------------+");
-
+                while (rs.next()) {
+                    String studentId = rs.getString("student_id");
+                    String studentName = rs.getString("name");
+                    System.out.printf("| %-10s | %-20s |%n", studentId, studentName);
                 }
 
-            } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println("+------------+----------------------+");
+
             }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Override
+    public void viewEnrolledStudents(Integer profId) {
+
+        // First, get the list of courses taught by the professor
+        String coursesSql = "SELECT course_id FROM course WHERE professor_id = ?";
+
+        try (Connection conn = DBUtils.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(coursesSql)) {
+
+            // Set the professor_id in the prepared statement
+            pstmt.setInt(1, profId);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+
+                boolean hasCourses = false;
+
+                // Iterate through the courses taught by the professor
+                while (rs.next()) {
+                    hasCourses = true;
+                    String courseId = rs.getString("course_id");
+
+                    // Call the method to view enrolled students for each course
+                    viewEnrolledStudents(courseId);
+                    System.out.println(); // Print a newline for better readability
+                }
+
+                if (!hasCourses) {
+                    System.out.println("The professor is not teaching any courses.");
+                }
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
 
-    public void viewEnrolledStudents(Integer profId) {
-
-            // First, get the list of courses taught by the professor
-            String coursesSql = "SELECT course_id FROM course WHERE professor_id = ?";
-
-            try (Connection conn = dbconnection.getConnection();
-                 PreparedStatement pstmt = conn.prepareStatement(coursesSql)) {
-
-                // Set the professor_id in the prepared statement
-                pstmt.setInt(1, profId);
-
-                try (ResultSet rs = pstmt.executeQuery()) {
-
-                    boolean hasCourses = false;
-
-                    // Iterate through the courses taught by the professor
-                    while (rs.next()) {
-                        hasCourses = true;
-                        String courseId = rs.getString("course_id");
-
-                        // Call the method to view enrolled students for each course
-                        viewEnrolledStudents(courseId);
-                        System.out.println(); // Print a newline for better readability
-                    }
-
-                    if (!hasCourses) {
-                        System.out.println("The professor is not teaching any courses.");
-                    }
-
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-
     }
-
+    @Override
     public boolean isCourseTaughtByProfessor(int professorId, String courseId) {
         String sql = "SELECT COUNT(*) FROM Course WHERE course_id = ? AND professor_id = ?";
-        try (Connection conn = dbconnection.getConnection();
+        try (Connection conn = DBUtils.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, courseId);
             pstmt.setInt(2, professorId);
@@ -166,11 +169,11 @@ public class ProfessorDaoOps {
         }
         return false;
     }
-
+    @Override
     public List<Integer> getStudentsInCourse(String courseId) {
         String sql = "SELECT student_id FROM CourseEnrollment WHERE course_id = ?";
         List<Integer> studentIds = new ArrayList<>();
-        try (Connection conn = dbconnection.getConnection();
+        try (Connection conn = DBUtils.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, courseId);
             ResultSet rs = pstmt.executeQuery();
@@ -182,10 +185,10 @@ public class ProfessorDaoOps {
         }
         return studentIds;
     }
-
+    @Override
     public boolean addGrade(int studentId, String courseId, String grade) {
         String sql = "INSERT INTO GradeCard (student_id, course_id, grade) VALUES (?, ?, ?)";
-        try (Connection conn = dbconnection.getConnection();
+        try (Connection conn = DBUtils.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, studentId);
             pstmt.setString(2, courseId);
@@ -197,11 +200,11 @@ public class ProfessorDaoOps {
         }
         return false;
     }
-
+    @Override
     public List<Course> getCoursesTaughtByProfessor(int professorId) {
         List<Course> courses = new ArrayList<>();
         String sql = "SELECT course_id, course_name FROM Course WHERE professor_id = ?";
-        try (Connection conn = dbconnection.getConnection();
+        try (Connection conn = DBUtils.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, professorId);
@@ -218,4 +221,3 @@ public class ProfessorDaoOps {
         return courses;
     }
 }
-
