@@ -6,7 +6,6 @@ CREATE TABLE User (
     name VARCHAR(100),
     role ENUM('Student', 'Professor', 'Admin') NOT NULL
 );
-
 CREATE TABLE Student (
     student_id INT PRIMARY KEY,
     department VARCHAR(50),
@@ -106,9 +105,6 @@ INSERT INTO CourseEnrollment (student_id, course_id) VALUES (1, 'C103');
 INSERT INTO CourseEnrollment (student_id, course_id) VALUES (1, 'C104');
 
 
-
-
--- select * from student;
 -- select * from course;
 -- select * from CourseEnrollment;
 -- select * from user;
