@@ -3,6 +3,10 @@ package com.flipkart.client;
 import com.flipkart.bean.Payment;
 import com.flipkart.bean.GradeCard;
 import com.flipkart.business.StudentOperations;
+<<<<<<< HEAD
+=======
+import com.flipkart.exception.CourseLimitExceededException;
+>>>>>>> e9b59a0 (Added exception and debugged)
 import com.flipkart.exception.InvalidPaymentAmountException;
 
 import java.util.ArrayList;
@@ -138,7 +142,6 @@ public class CRSStudentMenu {
 	}
 
 	private void addCourse(Integer studentId) {
-		// TODO Auto-generated method stub
 		if (!(studentOperations.isAddDropWindowOpen())) {
 			System.out.println("Course addition is currently disabled.");
 			return;
@@ -150,7 +153,9 @@ public class CRSStudentMenu {
 			System.out.print("Enter Course ID to add: ");
 			courseId = sc.nextLine();
 			if (studentOperations.isValidCourseId(courseId)) {
+				// Attempt to add the course and handle possible exceptions
 				studentOperations.addCourse(studentId, courseId);
+				// System.out.println("Course added successfully.");
 				break;
 			} else {
 				System.out.println("Invalid Course ID. Please enter a valid Course ID.");

@@ -8,6 +8,10 @@ import com.flipkart.bean.GradeCard;
 import com.flipkart.bean.Payment;
 import com.flipkart.bean.Student;
 import com.flipkart.dao.studentDaoOps;
+<<<<<<< HEAD
+=======
+import com.flipkart.exception.CourseLimitExceededException;
+>>>>>>> e9b59a0 (Added exception and debugged)
 import com.flipkart.exception.CourseNotFoundException;
 
 public class StudentOperations implements StudentOperationsInterface {
@@ -46,6 +50,7 @@ public class StudentOperations implements StudentOperationsInterface {
             try {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 success  = studentDaoOps.registerStudentForCourse(studentId, courseId);
 =======
                success  = studentDaoOps.registerStudentForCourse(studentId, courseId);
@@ -55,6 +60,11 @@ public class StudentOperations implements StudentOperationsInterface {
 >>>>>>> bb9e0eb (Payment Handled)
             }
             catch (CourseNotFoundException e) {
+=======
+                success  = studentDaoOps.registerStudentForCourse(studentId, courseId);
+            }
+            catch (CourseNotFoundException | CourseLimitExceededException e) {
+>>>>>>> e9b59a0 (Added exception and debugged)
                 e.getMessage();
             }
             if (success) {
@@ -74,11 +84,15 @@ public class StudentOperations implements StudentOperationsInterface {
                     success  = studentDaoOps.registerStudentForCourse(studentId, courseId);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> bb9e0eb (Payment Handled)
+=======
+>>>>>>> e9b59a0 (Added exception and debugged)
                     registeredCount++;
 =======
                 }
+<<<<<<< HEAD
                 catch (CourseNotFoundException e) {
                     e.getMessage();
 <<<<<<< HEAD
@@ -88,6 +102,10 @@ public class StudentOperations implements StudentOperationsInterface {
                     e.getMessage();
 =======
 >>>>>>> bb9e0eb (Payment Handled)
+=======
+                catch (CourseNotFoundException | CourseLimitExceededException e) {
+                    e.getMessage();
+>>>>>>> e9b59a0 (Added exception and debugged)
                 }
                 if (registeredCount == 4) {
                     break;
@@ -105,6 +123,7 @@ public class StudentOperations implements StudentOperationsInterface {
     }
     @Override
     public void addCourse(int studentId, String courseId) {
+<<<<<<< HEAD
         boolean success=false;
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -127,6 +146,22 @@ public class StudentOperations implements StudentOperationsInterface {
 >>>>>>> 7daa2c20199c10fbeffb932e2ea01ec1f34f4ae4
 =======
 >>>>>>> bb9e0eb (Payment Handled)
+=======
+        try {
+            // Attempt to add the course and handle possible exceptions
+            boolean success = studentDaoOps.registerStudentForCourse(studentId, courseId);
+
+        } catch (CourseLimitExceededException e) {
+            // Handle CourseLimitExceededException
+            System.out.println("Error: " + e.getMessage());
+        } catch (CourseNotFoundException e) {
+            // Handle CourseNotFoundException
+            System.out.println("Error: " + e.getMessage());
+        } catch (Exception e) {
+            // Handle other unexpected exceptions
+            System.out.println("An unexpected error occurred: " + e.getMessage());
+        }
+>>>>>>> e9b59a0 (Added exception and debugged)
     }
     @Override
     public void dropCourse(int studentId, String courseId) {

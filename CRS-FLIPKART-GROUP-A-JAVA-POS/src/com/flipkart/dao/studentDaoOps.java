@@ -4,6 +4,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import com.flipkart.bean.GradeCard;
+<<<<<<< HEAD
+=======
+import com.flipkart.exception.CourseLimitExceededException;
+>>>>>>> e9b59a0 (Added exception and debugged)
 import com.flipkart.exception.CourseNotFoundException;
 import com.flipkart.exception.CourseSeatsUnavailableException;
 import com.flipkart.utils.DBUtils;
@@ -121,7 +125,11 @@ public class studentDaoOps implements StudentDaoInterface{
         return false;
     }
     @Override
+<<<<<<< HEAD
     public boolean registerStudentForCourse(int studentId, String courseId) throws CourseNotFoundException {
+=======
+    public boolean registerStudentForCourse(int studentId, String courseId) throws CourseNotFoundException, CourseLimitExceededException {
+>>>>>>> e9b59a0 (Added exception and debugged)
         String checkSeatsSql = "SELECT available_seats FROM course WHERE course_id = ? AND available_seats > 0";
         String registerSql = "INSERT INTO CourseEnrollment (student_id, course_id) VALUES (?, ?)";
         String updateSeatsSql = "UPDATE course SET available_seats = available_seats - 1 WHERE course_id = ?";
@@ -129,7 +137,7 @@ public class studentDaoOps implements StudentDaoInterface{
         try (Connection conn = DBUtils.getConnection();
              PreparedStatement checkSeatsStmt = conn.prepareStatement(checkSeatsSql);
              PreparedStatement registerStmt = conn.prepareStatement(registerSql);
-             PreparedStatement updateSeatsStmt = conn.prepareStatement(updateSeatsSql)){
+             PreparedStatement updateSeatsStmt = conn.prepareStatement(updateSeatsSql)) {
 
             // Check if the course has available seats
             checkSeatsStmt.setString(1, courseId);
@@ -139,6 +147,12 @@ public class studentDaoOps implements StudentDaoInterface{
                 int availableSeats = rs.getInt("available_seats");
 
                 if (availableSeats > 0) {
+                    // Check if the student has reached the maximum number of courses
+                    int registeredCoursesCount = getRegisteredCourseCount(studentId);
+                    if (registeredCoursesCount >= 4) { // Courses limit is 4
+                        throw new CourseLimitExceededException("Cannot register for more than 4 courses.");
+                    }
+
                     // Register the student for the course
                     registerStmt.setInt(1, studentId);
                     registerStmt.setString(2, courseId);
@@ -159,11 +173,38 @@ public class studentDaoOps implements StudentDaoInterface{
                 throw new CourseNotFoundException(courseId);
             }
 
+<<<<<<< HEAD
         } catch (Exception e) {
             e.getMessage();
+=======
+        } catch (SQLException e) {
+            e.printStackTrace(); // Print stack trace for debugging
+>>>>>>> e9b59a0 (Added exception and debugged)
             return false; // Registration failed due to an SQL exception
         }
     }
+
+    public int getRegisteredCourseCount(int studentId) {
+        String countCoursesSql = "SELECT COUNT(*) AS course_count FROM CourseEnrollment WHERE student_id = ?";
+
+        try (Connection conn = DBUtils.getConnection();
+             PreparedStatement countCoursesStmt = conn.prepareStatement(countCoursesSql)) {
+
+            countCoursesStmt.setInt(1, studentId);
+            ResultSet rs = countCoursesStmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("course_count");
+            } else {
+                return 0; // If no records found, assume the student is not registered in any courses
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace(); // Print stack trace for debugging
+            return 0; // Return 0 in case of an SQL exception
+        }
+    }
+
     @Override
     public boolean removeStudentFromCourse(int studentId, String courseId) {
         String checkEnrollmentSql = "SELECT COUNT(*) FROM CourseEnrollment WHERE student_id = ? AND course_id = ?";
