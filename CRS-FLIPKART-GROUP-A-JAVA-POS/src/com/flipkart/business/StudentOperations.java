@@ -45,10 +45,14 @@ public class StudentOperations implements StudentOperationsInterface {
             boolean success=false;
             try {
 <<<<<<< HEAD
+<<<<<<< HEAD
                 success  = studentDaoOps.registerStudentForCourse(studentId, courseId);
 =======
                success  = studentDaoOps.registerStudentForCourse(studentId, courseId);
 >>>>>>> 7daa2c20199c10fbeffb932e2ea01ec1f34f4ae4
+=======
+                success  = studentDaoOps.registerStudentForCourse(studentId, courseId);
+>>>>>>> bb9e0eb (Payment Handled)
             }
             catch (CourseNotFoundException e) {
                 e.getMessage();
@@ -69,15 +73,21 @@ public class StudentOperations implements StudentOperationsInterface {
                 try {
                     success  = studentDaoOps.registerStudentForCourse(studentId, courseId);
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> bb9e0eb (Payment Handled)
                     registeredCount++;
 =======
                 }
                 catch (CourseNotFoundException e) {
                     e.getMessage();
+<<<<<<< HEAD
 >>>>>>> 7daa2c20199c10fbeffb932e2ea01ec1f34f4ae4
                 }
                 catch (CourseNotFoundException e) {
                     e.getMessage();
+=======
+>>>>>>> bb9e0eb (Payment Handled)
                 }
                 if (registeredCount == 4) {
                     break;
@@ -97,12 +107,16 @@ public class StudentOperations implements StudentOperationsInterface {
     public void addCourse(int studentId, String courseId) {
         boolean success=false;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> bb9e0eb (Payment Handled)
         try{
             success= studentDaoOps.registerStudentForCourse(studentId, courseId);
         }
         catch (CourseNotFoundException e) {
             e.getMessage();
         }
+<<<<<<< HEAD
 =======
       try{
          success= studentDaoOps.registerStudentForCourse(studentId, courseId);
@@ -111,6 +125,8 @@ public class StudentOperations implements StudentOperationsInterface {
           e.getMessage();
       }
 >>>>>>> 7daa2c20199c10fbeffb932e2ea01ec1f34f4ae4
+=======
+>>>>>>> bb9e0eb (Payment Handled)
     }
     @Override
     public void dropCourse(int studentId, String courseId) {
