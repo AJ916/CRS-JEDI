@@ -79,7 +79,7 @@ public class CRSProfessorMenu {
 		System.out.print("Enter the Course ID to add grades: ");
 		String courseId = sc.nextLine();
 
-		// Validate course ID
+		// Validate course
 		boolean validCourse = courses.stream()
 				.anyMatch(course -> course.getCourseID().equals(courseId));
 

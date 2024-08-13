@@ -44,7 +44,11 @@ public class StudentOperations implements StudentOperationsInterface {
         for (String courseId : primaryCourses) {
             boolean success=false;
             try {
+<<<<<<< HEAD
                 success  = studentDaoOps.registerStudentForCourse(studentId, courseId);
+=======
+               success  = studentDaoOps.registerStudentForCourse(studentId, courseId);
+>>>>>>> 7daa2c20199c10fbeffb932e2ea01ec1f34f4ae4
             }
             catch (CourseNotFoundException e) {
                 e.getMessage();
@@ -64,7 +68,13 @@ public class StudentOperations implements StudentOperationsInterface {
                 boolean success=false;
                 try {
                     success  = studentDaoOps.registerStudentForCourse(studentId, courseId);
+<<<<<<< HEAD
                     registeredCount++;
+=======
+                }
+                catch (CourseNotFoundException e) {
+                    e.getMessage();
+>>>>>>> 7daa2c20199c10fbeffb932e2ea01ec1f34f4ae4
                 }
                 catch (CourseNotFoundException e) {
                     e.getMessage();
@@ -86,12 +96,21 @@ public class StudentOperations implements StudentOperationsInterface {
     @Override
     public void addCourse(int studentId, String courseId) {
         boolean success=false;
+<<<<<<< HEAD
         try{
             success= studentDaoOps.registerStudentForCourse(studentId, courseId);
         }
         catch (CourseNotFoundException e) {
             e.getMessage();
         }
+=======
+      try{
+         success= studentDaoOps.registerStudentForCourse(studentId, courseId);
+      }
+      catch (CourseNotFoundException e) {
+          e.getMessage();
+      }
+>>>>>>> 7daa2c20199c10fbeffb932e2ea01ec1f34f4ae4
     }
     @Override
     public void dropCourse(int studentId, String courseId) {
