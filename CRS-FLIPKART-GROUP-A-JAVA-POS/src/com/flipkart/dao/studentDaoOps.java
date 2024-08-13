@@ -5,9 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 import com.flipkart.bean.GradeCard;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 import com.flipkart.exception.CourseLimitExceededException;
 >>>>>>> e9b59a0 (Added exception and debugged)
+=======
+import com.flipkart.exception.CourseLimitExceededException;
+>>>>>>> dd79919 (Final Push xD)
 import com.flipkart.exception.CourseNotFoundException;
 import com.flipkart.exception.CourseSeatsUnavailableException;
 import com.flipkart.utils.DBUtils;
@@ -126,10 +130,14 @@ public class studentDaoOps implements StudentDaoInterface{
     }
     @Override
 <<<<<<< HEAD
+<<<<<<< HEAD
     public boolean registerStudentForCourse(int studentId, String courseId) throws CourseNotFoundException {
 =======
     public boolean registerStudentForCourse(int studentId, String courseId) throws CourseNotFoundException, CourseLimitExceededException {
 >>>>>>> e9b59a0 (Added exception and debugged)
+=======
+    public boolean registerStudentForCourse(int studentId, String courseId) throws CourseNotFoundException, CourseLimitExceededException {
+>>>>>>> dd79919 (Final Push xD)
         String checkSeatsSql = "SELECT available_seats FROM course WHERE course_id = ? AND available_seats > 0";
         String registerSql = "INSERT INTO CourseEnrollment (student_id, course_id) VALUES (?, ?)";
         String updateSeatsSql = "UPDATE course SET available_seats = available_seats - 1 WHERE course_id = ?";
@@ -174,12 +182,17 @@ public class studentDaoOps implements StudentDaoInterface{
             }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         } catch (Exception e) {
             e.getMessage();
 =======
         } catch (SQLException e) {
             e.printStackTrace(); // Print stack trace for debugging
 >>>>>>> e9b59a0 (Added exception and debugged)
+=======
+        } catch (SQLException e) {
+            e.printStackTrace(); // Print stack trace for debugging
+>>>>>>> dd79919 (Final Push xD)
             return false; // Registration failed due to an SQL exception
         }
     }

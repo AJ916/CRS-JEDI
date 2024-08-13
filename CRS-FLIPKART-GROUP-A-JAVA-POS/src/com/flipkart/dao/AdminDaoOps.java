@@ -204,14 +204,20 @@ public class AdminDaoOps implements AdminDaoInterface {
     @Override
     public void removeProf(Integer instructor_id) {
         String sql = "DELETE FROM Professor WHERE professor_id = ?";
+        String sql2 = "DELETE FROM User WHERE user_id = ?";
 
         try (Connection conn = DBUtils.getConnection();
-             PreparedStatement userPstmt = conn.prepareStatement(sql)) {
+             PreparedStatement userPstmt = conn.prepareStatement(sql);
+             PreparedStatement Pstmt2 = conn.prepareStatement(sql2)) {
 
             // Set parameters for the User table insertion
             userPstmt.setInt(1, instructor_id);
+            Pstmt2.setInt(1, instructor_id);
 
-
+            try{Pstmt2.executeUpdate();}
+            catch(SQLException e){
+                System.out.println("professor is already teaching courses");
+            }
             // Execute the User insertion
             int affectedRows = userPstmt.executeUpdate();
 
@@ -222,7 +228,7 @@ public class AdminDaoOps implements AdminDaoInterface {
                 System.out.println("Prof not found ");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Try removing professor from courses first!");
         }
     }
     @Override

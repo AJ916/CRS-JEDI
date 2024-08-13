@@ -2,9 +2,13 @@ package com.flipkart.dao;
 
 import com.flipkart.bean.GradeCard;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 import com.flipkart.exception.CourseLimitExceededException;
 >>>>>>> e9b59a0 (Added exception and debugged)
+=======
+import com.flipkart.exception.CourseLimitExceededException;
+>>>>>>> dd79919 (Final Push xD)
 import com.flipkart.exception.CourseNotFoundException;
 
 
@@ -45,10 +49,14 @@ public interface StudentDaoInterface  {
      * @return true if the registration is successful, false otherwise.
      */
 <<<<<<< HEAD
+<<<<<<< HEAD
     boolean registerStudentForCourse(int studentId, String courseId) throws CourseNotFoundException;
 =======
     boolean registerStudentForCourse(int studentId, String courseId) throws CourseNotFoundException, CourseLimitExceededException;
 >>>>>>> e9b59a0 (Added exception and debugged)
+=======
+    boolean registerStudentForCourse(int studentId, String courseId) throws CourseNotFoundException, CourseLimitExceededException;
+>>>>>>> dd79919 (Final Push xD)
 
     /**
      * Removes a student from a specific course.

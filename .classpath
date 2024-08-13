@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="CRS-FLIPKART-GROUP-A-JAVA-POS/src"/>
+	<classpathentry kind="src" path="CRS-FLIPKART-GROUP-A-JAVA-POS-COLLECTION/src"/>
+	<classpathentry kind="src" path="JEDI_Flipkart_DropWizard/src/main/java"/>
+	<classpathentry kind="src" path="JEDI_Flipkart_DropWizard/src/test/java"/>
+	<classpathentry kind="output" path="JEDI_Flipkart_DropWizard/target/classes"/>
+</classpath>
