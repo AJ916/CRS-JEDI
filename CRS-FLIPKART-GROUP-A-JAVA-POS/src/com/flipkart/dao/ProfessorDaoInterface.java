@@ -1,6 +1,7 @@
 package com.flipkart.dao;
 
 import com.flipkart.bean.Course;
+import com.flipkart.exception.DuplicateGradeException;
 
 import java.util.List;
 
@@ -51,7 +52,7 @@ public interface ProfessorDaoInterface {
      * @param grade The grade to be added.
      * @return true if the grade was successfully added, false otherwise.
      */
-    boolean addGrade(int studentId, String courseId, String grade);
+    boolean addGrade(int studentId, String courseId, String grade) throws DuplicateGradeException;
 
     /**
      * Retrieves a list of courses taught by a specific professor.

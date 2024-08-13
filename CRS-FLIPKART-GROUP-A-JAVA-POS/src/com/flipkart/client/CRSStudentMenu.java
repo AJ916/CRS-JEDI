@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.*;
+import java.util.stream.IntStream;
 
 public class CRSStudentMenu {
 	private StudentOperations studentOperations;
@@ -17,8 +18,6 @@ public class CRSStudentMenu {
 
 	public void CreateStudentMenu(Integer studentId) {
 		// TODO Auto-generated method stub
-		System.out.println("in student menu!");
-
 		Scanner sc = new Scanner(System.in);
 
 		int input = 0;
@@ -184,42 +183,46 @@ public class CRSStudentMenu {
 		// Prompt the student to select 4 primary courses
 		List<String> primaryCourses = new ArrayList<>();
 		System.out.println("Select 4 primary courses:");
-		for (int i = 1; i <= 4; i++) {
+		IntStream.rangeClosed(1, 4).forEach(i -> {
 			String courseId;
 			while (true) {
 				System.out.print("Enter Course ID for primary course " + i + ": ");
 				courseId = scanner.nextLine();
-				if (studentOperations.isValidCourseId(courseId) && !selectedCourses.contains(courseId)) {
+				// if (studentOperations.isValidCourseId(courseId) && !selectedCourses.contains(courseId)) {
+				if (!selectedCourses.contains(courseId)) {
 					primaryCourses.add(courseId);
 					selectedCourses.add(courseId); // Add to the set to track the selection
 					break;
-				} else if (selectedCourses.contains(courseId)) {
-					System.out.println("You have already selected this course. Please choose a different Course ID.");
 				} else {
-					System.out.println("Invalid Course ID. Please enter a valid Course ID.");
+					System.out.println("You have already selected this course. Please choose a different Course ID.");
 				}
+				// } else {
+				//     System.out.println("Invalid Course ID. Please enter a valid Course ID.");
+				// }
 			}
-		}
+		});
 
 		// Prompt the student to select 2 alternate courses
 		List<String> alternateCourses = new ArrayList<>();
 		System.out.println("Select 2 alternate courses:");
-		for (int i = 1; i <= 2; i++) {
+		IntStream.rangeClosed(1, 2).forEach(i -> {
 			String courseId;
 			while (true) {
 				System.out.print("Enter Course ID for alternate course " + i + ": ");
 				courseId = scanner.nextLine();
-				if (studentOperations.isValidCourseId(courseId) && !selectedCourses.contains(courseId)) {
+				// if (studentOperations.isValidCourseId(courseId) && !selectedCourses.contains(courseId)) {
+				if (!selectedCourses.contains(courseId)) {
 					alternateCourses.add(courseId);
 					selectedCourses.add(courseId); // Add to the set to track the selection
 					break;
-				} else if (selectedCourses.contains(courseId)) {
-					System.out.println("You have already selected this course. Please choose a different Course ID.");
 				} else {
-					System.out.println("Invalid Course ID. Please enter a valid Course ID.");
+					System.out.println("You have already selected this course. Please choose a different Course ID.");
 				}
+				// } else {
+				//     System.out.println("Invalid Course ID. Please enter a valid Course ID.");
+				// }
 			}
-		}
+		});
 
 		// Call StudentOperations to attempt course registration
 		studentOperations.registerCourses(studentId, primaryCourses, alternateCourses);
@@ -263,9 +266,11 @@ public class CRSStudentMenu {
 		System.out.println("|" + "-".repeat(courseIdWidth) + "+" + "-".repeat(courseNameWidth) + "+" + "-".repeat(gradeWidth) + "  |");
 
 		// Print the course details
-		for (GradeCard card : gradeCards) {
-			System.out.printf("|%-" + courseIdWidth + "s| %-" + courseNameWidth + "s| %-" + gradeWidth + "s|%n", card.getCourseId(), card.getCourseName(), card.getGrade());
-		}
+		gradeCards.forEach(card ->
+				System.out.printf("|%-" + courseIdWidth + "s| %-" + courseNameWidth + "s| %-" + gradeWidth + "s|%n",
+						card.getCourseId(), card.getCourseName(), card.getGrade())
+		);
+
 
 		// Print the bottom border
 		System.out.println("+" + "-".repeat(courseIdWidth) + "+" + "-".repeat(courseNameWidth) + "+" + "-".repeat(gradeWidth) + "+");

@@ -1,11 +1,13 @@
 package com.flipkart.dao;
 
 import com.flipkart.bean.Course;
+import com.flipkart.exception.DuplicateGradeException;
 import com.flipkart.utils.DBUtils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.*;
@@ -186,7 +188,7 @@ public class ProfessorDaoOps implements ProfessorDaoInterface{
         return studentIds;
     }
     @Override
-    public boolean addGrade(int studentId, String courseId, String grade) {
+    public boolean addGrade(int studentId, String courseId, String grade) throws DuplicateGradeException {
         String sql = "INSERT INTO GradeCard (student_id, course_id, grade) VALUES (?, ?, ?)";
         try (Connection conn = DBUtils.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -195,7 +197,11 @@ public class ProfessorDaoOps implements ProfessorDaoInterface{
             pstmt.setString(3, grade);
             int affectedRows = pstmt.executeUpdate();
             return affectedRows > 0;
-        } catch (Exception e) {
+        } catch (SQLIntegrityConstraintViolationException e) {
+            // Throw custom exception for duplicate entry
+            throw new DuplicateGradeException("Duplicate entry for course ID " + courseId + " and student ID " + studentId);
+        }
+            catch (Exception e) {
             e.printStackTrace();
         }
         return false;

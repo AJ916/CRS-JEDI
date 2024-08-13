@@ -8,6 +8,10 @@ import com.flipkart.business.AdminOperations;
 import com.flipkart.business.ProfessorOperations;
 import com.flipkart.business.StudentOperations;
 import com.flipkart.business.UserOperations;
+import com.flipkart.exception.InvalidCredentialsException;
+
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 //import com.flipkart.dao.UserDaoOps;
 
 import java.util.Scanner;
@@ -71,81 +75,81 @@ public class CRSApplication {
     }
 
     private void login() {
-
-
-        User user;
-        user = new User();
+        User user = new User();
         System.out.println("********************************");
         System.out.println("Enter your Username: ");
         String username = sc.nextLine();
         System.out.println("Enter your Password: ");
-
         String password = sc.nextLine();
-        if (userOps.checkCredentials(username, password)) {
+
+        try {
+            // Validate credentials and throw an exception if invalid
+            userOps.validateCredentials(username, password);
+
             user.setUserName(username);
             user.setPassword(password);
-        }
+            userOps.getRolebyLogin(user);
 
-        userOps.getRolebyLogin(user);
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+            LocalDateTime now = LocalDateTime.now();
 
-        switch (user.getRole()) {
-            case "Student":
-                Student stud;
-                stud = new Student();
-                stud.setUserName(user.getUserName());
-                stud.setPassword(user.getPassword());
-                stud.setRole("Student");
-                stud.setStudentID(user.getUserId());
-                if (userOps.isApproved(stud.getUserName())) {
+            switch (user.getRole()) {
+                case "Student":
+                    Student stud = new Student();
+                    stud.setUserName(user.getUserName());
+                    stud.setPassword(user.getPassword());
+                    stud.setRole("Student");
+                    stud.setStudentID(user.getUserId());
+                    if (userOps.isApproved(stud.getUserName())) {
+                        System.out.println("********************************");
+                        System.out.println("Logged In Successfully as a Student");
+                        System.out.println("Welcome " + stud.getUserName() + " !!");
+                        System.out.println("Login Time: " + dtf.format(now));
+                        CRSStudentMenu studCrs = new CRSStudentMenu();
+                        studCrs.CreateStudentMenu(stud.getStudentID());
+                    } else {
+                        System.out.println("You have not been approved");
+                    }
+                    break;
+
+                case "Professor":
+                    Professor prof = new Professor();
+                    prof.setUserName(user.getUserName());
+                    prof.setPassword(user.getPassword());
+                    prof.setRole("Professor");
+                    prof.setProfessorID(user.getUserId());
 
                     System.out.println("********************************");
-                    System.out.println("Logged In Successfully as a Student");
-                    System.out.println("Welcome " + stud.getUserName() + " !!");
-
-                    CRSStudentMenu studCrs = new CRSStudentMenu();
-//					Integer studID = studentOps.getStudentIdByUsername(stud.getUserName());
-                    studCrs.CreateStudentMenu(stud.getStudentID());
-//					System.out.println("Welcome " + stud.getUserName() + " !!");
+                    System.out.println("Logged In Successfully as a Professor");
+                    System.out.println("Welcome " + prof.getUserName() + " !!");
+                    System.out.println("Login Time: " + dtf.format(now));
+                    CRSProfessorMenu profCrs = new CRSProfessorMenu();
+                    profCrs.CreateProfessorMenu(prof.getProfessorId());
                     break;
-                } else {
-                    System.out.println("you have not been approved");
+
+                case "Admin":
+                    Admin admin = new Admin();
+                    admin.setUserId(user.getUserId());
+                    admin.setUserName(user.getUserName());
+
+                    System.out.println("********************************");
+                    System.out.println("Logged In Successfully as an Admin");
+                    System.out.println("Welcome " + admin.getUserName() + " !!");
+                    System.out.println("Login Time: " + dtf.format(now));
+                    CRSAdminMenu admCrs = new CRSAdminMenu();
+                    admCrs.CreateAdminMenu(admin.getUserId());
                     break;
-                }
 
-            case "Professor":
-                Professor prof;
-                prof = new Professor();
-                prof.setUserName(user.getUserName());
-                prof.setPassword(user.getPassword());
-                prof.setRole("Professor");
-                prof.setProfessorID(user.getUserId());
-
-                System.out.println("********************************");
-                System.out.println("Logged In Successfully as a Professor");
-                System.out.println("Welcome " + prof.getUserName() + " !!");
-                CRSProfessorMenu profCrs = new CRSProfessorMenu();
-                profCrs.CreateProfessorMenu(prof.getProfessorId());
-                break;
-
-
-            case "Admin":
-                Admin admin;
-                admin = new Admin();
-                admin.setUserId(user.getUserId());
-                admin.setUserName(user.getUserName());
-                System.out.println("********************************");
-                System.out.println("Logged In Successfully as an Admin");
-                System.out.println("Welcome " + admin.getUserName() + " !!");
-                CRSAdminMenu admCrs = new CRSAdminMenu();
-                admCrs.CreateAdminMenu(admin.getUserId());
-                break;
-
-            default:
-                System.out.println("Invalid Role");
-                System.out.println("********************************");
-                break;
+                default:
+                    System.out.println("Invalid Role");
+                    System.out.println("********************************");
+                    break;
+            }
+        } catch (InvalidCredentialsException e) {
+            System.out.println(e.getMessage());
         }
     }
+
 
     void registerNewStudent() {
         String username;

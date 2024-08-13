@@ -1,9 +1,12 @@
 package com.flipkart.dao;
 
 import com.flipkart.bean.GradeCard;
+import com.flipkart.exception.CourseNotFoundException;
+
+
 import java.util.List;
 
-public interface StudentDaoInterface {
+public interface StudentDaoInterface  {
 
     /**
      * Registers a new student by inserting their information into the User and Student tables.
@@ -37,7 +40,7 @@ public interface StudentDaoInterface {
      * @param courseId The ID of the course to register for.
      * @return true if the registration is successful, false otherwise.
      */
-    boolean registerStudentForCourse(int studentId, String courseId);
+    boolean registerStudentForCourse(int studentId, String courseId) throws CourseNotFoundException;
 
     /**
      * Removes a student from a specific course.
@@ -46,7 +49,7 @@ public interface StudentDaoInterface {
      * @param courseId The ID of the course to remove from.
      * @return true if the removal is successful, false otherwise.
      */
-    boolean removeStudentFromCourse(int studentId, String courseId);
+    boolean removeStudentFromCourse(int studentId, String courseId) ;
 
     /**
      * Checks if a given course ID is valid and exists in the system.

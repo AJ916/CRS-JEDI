@@ -4,7 +4,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import com.flipkart.bean.GradeCard;
+import com.flipkart.exception.CourseNotFoundException;
+import com.flipkart.exception.CourseSeatsUnavailableException;
 import com.flipkart.utils.DBUtils;
+import com.flipkart.exception.CourseNotFoundException;
 
 
 public class studentDaoOps implements StudentDaoInterface{
@@ -118,7 +121,7 @@ public class studentDaoOps implements StudentDaoInterface{
         return false;
     }
     @Override
-    public boolean registerStudentForCourse(int studentId, String courseId) {
+    public boolean registerStudentForCourse(int studentId, String courseId) throws CourseNotFoundException {
         String checkSeatsSql = "SELECT available_seats FROM course WHERE course_id = ? AND available_seats > 0";
         String registerSql = "INSERT INTO CourseEnrollment (student_id, course_id) VALUES (?, ?)";
         String updateSeatsSql = "UPDATE course SET available_seats = available_seats - 1 WHERE course_id = ?";
@@ -149,11 +152,11 @@ public class studentDaoOps implements StudentDaoInterface{
                     return true; // Registration succeeded
                 } else {
                     System.out.println("Course " + courseId + " is full. No seats available.");
+
                     return false; // No seats available
                 }
             } else {
-                System.out.println("Course " + courseId + " does not exist.");
-                return false; // Course does not exist
+                throw new CourseNotFoundException(courseId);
             }
 
         } catch (Exception e) {
