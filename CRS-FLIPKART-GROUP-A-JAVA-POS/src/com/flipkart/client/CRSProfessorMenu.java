@@ -5,6 +5,7 @@ import com.flipkart.business.ProfessorOperations;
 
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.IntStream;
 
 public class CRSProfessorMenu {
 	private ProfessorOperations professorOps;
@@ -14,7 +15,6 @@ public class CRSProfessorMenu {
 	}
 	public void CreateProfessorMenu(Integer profId) {
 
-		System.out.println("in professor menu!");
 		Scanner sc=new Scanner(System.in);
 
 		int input = 0;
@@ -68,9 +68,11 @@ public class CRSProfessorMenu {
 
 		// Display courses to the professor
 		System.out.println("Courses taught by Professor ID " + professorId + ":");
-		for (int i = 0; i < courses.size(); i++) {
-			System.out.println((i + 1) + ". " + courses.get(i).getCourseID() + " " +courses.get(i).getCoursename()); // Display course ID and name
-		}
+		IntStream.range(0, courses.size())
+				.forEach(i ->
+						System.out.println((i + 1) + ". " + courses.get(i).getCourseID() + " " + courses.get(i).getCoursename())
+				);
+
 
 		// Prompt professor to select a course ID
 		Scanner sc = new Scanner(System.in);

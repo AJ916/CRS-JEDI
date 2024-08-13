@@ -8,6 +8,7 @@ import com.flipkart.bean.GradeCard;
 import com.flipkart.bean.Payment;
 import com.flipkart.bean.Student;
 import com.flipkart.dao.studentDaoOps;
+import com.flipkart.exception.CourseNotFoundException;
 
 public class StudentOperations implements StudentOperationsInterface {
     private List<Student> students;
@@ -39,12 +40,19 @@ public class StudentOperations implements StudentOperationsInterface {
     public void registerCourses(int studentId, List<String> primaryCourses, List<String> alternateCourses) {
         int registeredCount = 0;
         // Try registering for primary courses
+
         for (String courseId : primaryCourses) {
-            boolean success = studentDaoOps.registerStudentForCourse(studentId, courseId);
+            boolean success=false;
+            try {
+                success  = studentDaoOps.registerStudentForCourse(studentId, courseId);
+            }
+            catch (CourseNotFoundException e) {
+                e.getMessage();
+            }
             if (success) {
                 registeredCount++;
             }
-            if (registeredCount >= 4) {
+            if (registeredCount == 4) {
                 break;
             }
         }
@@ -52,11 +60,16 @@ public class StudentOperations implements StudentOperationsInterface {
         // If not all primary courses were available, try alternate courses
         if (registeredCount < 4) {
             for (String courseId : alternateCourses) {
-                boolean success = studentDaoOps.registerStudentForCourse(studentId, courseId);
-                if (success) {
+
+                boolean success=false;
+                try {
+                    success  = studentDaoOps.registerStudentForCourse(studentId, courseId);
                     registeredCount++;
                 }
-                if (registeredCount >= 4) {
+                catch (CourseNotFoundException e) {
+                    e.getMessage();
+                }
+                if (registeredCount == 4) {
                     break;
                 }
             }
@@ -72,7 +85,13 @@ public class StudentOperations implements StudentOperationsInterface {
     }
     @Override
     public void addCourse(int studentId, String courseId) {
-        studentDaoOps.registerStudentForCourse(studentId, courseId);
+        boolean success=false;
+        try{
+            success= studentDaoOps.registerStudentForCourse(studentId, courseId);
+        }
+        catch (CourseNotFoundException e) {
+            e.getMessage();
+        }
     }
     @Override
     public void dropCourse(int studentId, String courseId) {

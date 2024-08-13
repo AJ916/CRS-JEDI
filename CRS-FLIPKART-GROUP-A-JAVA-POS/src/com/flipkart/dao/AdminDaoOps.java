@@ -142,7 +142,7 @@ public class AdminDaoOps implements AdminDaoInterface {
         try (Connection conn = DBUtils.getConnection();
              PreparedStatement userPstmt = conn.prepareStatement(userSql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
-            // Set parameters for the User table insertion
+            // Set parameters          the User table insertion
             userPstmt.setString(1, course_id);
             userPstmt.setString(2, course_name);
             userPstmt.setBoolean(3, isOffered);

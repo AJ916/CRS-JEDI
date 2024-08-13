@@ -4,7 +4,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import com.flipkart.bean.GradeCard;
+import com.flipkart.exception.CourseNotFoundException;
+import com.flipkart.exception.CourseSeatsUnavailableException;
 import com.flipkart.utils.DBUtils;
+import com.flipkart.exception.CourseNotFoundException;
 
 
 public class studentDaoOps implements StudentDaoInterface{
@@ -67,7 +70,7 @@ public class studentDaoOps implements StudentDaoInterface{
         }catch (Exception e) {
             e.printStackTrace();
         }
-    return sId;
+        return sId;
     }
     @Override
     public void displayCourseCatalog() {
@@ -87,7 +90,7 @@ public class studentDaoOps implements StudentDaoInterface{
             while (rs.next()) {
                 String courseId = rs.getString("course_id");
                 String courseName = rs.getString("course_name");
-               // String department = rs.getString("department");
+                // String department = rs.getString("department");
                 String professorName = rs.getString("professor_name") != null ? rs.getString("professor_name") : "TBD";
                 System.out.printf("| %-9s | %-30s | %-15s |%n", courseId, courseName, professorName);
             }
@@ -103,8 +106,8 @@ public class studentDaoOps implements StudentDaoInterface{
         String updatePaymentSql = "INSERT INTO Payment (student_id) VALUES (?)";
         try (Connection conn = DBUtils.getConnection();
              PreparedStatement updatePaymentStmt = conn.prepareStatement(updatePaymentSql)){
-             updatePaymentStmt.setInt(1, studentId);
-             int affectedRows = updatePaymentStmt.executeUpdate();
+            updatePaymentStmt.setInt(1, studentId);
+            int affectedRows = updatePaymentStmt.executeUpdate();
             if(affectedRows > 0){
                 return true;
             }
@@ -118,7 +121,7 @@ public class studentDaoOps implements StudentDaoInterface{
         return false;
     }
     @Override
-    public boolean registerStudentForCourse(int studentId, String courseId) {
+    public boolean registerStudentForCourse(int studentId, String courseId) throws CourseNotFoundException {
         String checkSeatsSql = "SELECT available_seats FROM course WHERE course_id = ? AND available_seats > 0";
         String registerSql = "INSERT INTO CourseEnrollment (student_id, course_id) VALUES (?, ?)";
         String updateSeatsSql = "UPDATE course SET available_seats = available_seats - 1 WHERE course_id = ?";
@@ -149,15 +152,15 @@ public class studentDaoOps implements StudentDaoInterface{
                     return true; // Registration succeeded
                 } else {
                     System.out.println("Course " + courseId + " is full. No seats available.");
+
                     return false; // No seats available
                 }
             } else {
-                System.out.println("Course " + courseId + " does not exist.");
-                return false; // Course does not exist
+                throw new CourseNotFoundException(courseId);
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            e.getMessage();
             return false; // Registration failed due to an SQL exception
         }
     }

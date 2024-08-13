@@ -11,7 +11,6 @@ public class CRSAdminMenu {
     public void CreateAdminMenu(Integer AdminId) {
         adminOps = new AdminOperations();
         // TODO Auto-generated method stub
-        System.out.println("in admin menu!");
         Scanner sc = new Scanner(System.in);
 
         int input = 0;

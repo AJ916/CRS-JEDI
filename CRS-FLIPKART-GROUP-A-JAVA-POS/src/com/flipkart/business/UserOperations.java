@@ -2,6 +2,7 @@ package com.flipkart.business;
 
 import com.flipkart.bean.User;
 import com.flipkart.dao.UserDaoOps;
+import com.flipkart.exception.InvalidCredentialsException;
 
 
 public class UserOperations implements UserOperationsInterface{
@@ -27,5 +28,10 @@ public class UserOperations implements UserOperationsInterface{
 	public Boolean checkCredentials(String username, String password ){
 
 		return userDaoOps.checkCredentials(username, password);
+	}
+	public void validateCredentials(String username, String password) throws InvalidCredentialsException {
+		if (!checkCredentials(username, password)) {
+			throw new InvalidCredentialsException("INVALID CREDENTIALS");
+		}
 	}
 }
