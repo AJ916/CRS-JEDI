@@ -107,7 +107,9 @@ INSERT INTO CourseEnrollment (student_id, course_id) VALUES (1, 'C104');
 
 -- select * from course;
 -- select * from CourseEnrollment;
--- select * from user;
+select * from user;
 select * from systemsettings;
+select * from Professor;
+select * from student;
 
 
