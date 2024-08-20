@@ -112,4 +112,12 @@ select * from systemsettings;
 select * from Professor;
 select * from student;
 
+CREATE TABLE Demo (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50),
+    age INT,
+    gender VARCHAR(50),
+    email VARCHAR(100)
+);
+select * from demo;
 
